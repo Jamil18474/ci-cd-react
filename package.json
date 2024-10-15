@@ -2,9 +2,10 @@
   "name": "ci-cd-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://jamil18474.github.io/ci-cd-react/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
+    "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^13.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -14,8 +15,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --coverage --watchAll=false",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "jsdoc": "jsdoc -R ./README.md -c ./jsdoc.config.json -r -d ./public/docs"
   },
   "eslintConfig": {
     "extends": [
@@ -33,6 +37,22 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.25.8",
+    "babel-jest": "^29.7.0",
+    "gh-pages": "^6.2.0",
+    "jest": "^27.5.1",
+    "jsdoc": "^4.0.3",
+    "react-test-renderer": "^18.3.1"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*js",
+      "!src/reportWebVitals.js",
+      "!src/index.js",
+      "!src/babel.config.js"
     ]
   }
 }
