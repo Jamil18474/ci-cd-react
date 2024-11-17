@@ -11,8 +11,7 @@ describe('UsersList', () => {
 
     /**
      * Test case to check if the title is rendered.
-     * @test
-     * @description This test verifies that the title "Liste des utilisateurs inscrits" is displayed when the UsersList component is rendered.
+     * This test verifies that the title "Liste des utilisateurs inscrits" is displayed when the UsersList component is rendered.
      */
     test('renders the title', () => {
         render(<UsersList users={[]} />);
@@ -24,8 +23,8 @@ describe('UsersList', () => {
 
     /**
      * Test case to check if a list of users is rendered.
-     * @test
-     * @description This test verifies that the UsersList component correctly displays a list of users when provided with user data.
+     *
+     * This test verifies that the UsersList component correctly displays a list of users when provided with user data.
      */
     test('renders a list of users', () => {
         const users = [
@@ -58,8 +57,8 @@ describe('UsersList', () => {
 
     /**
      * Test case to check if an empty list message is rendered when no users are provided.
-     * @test
-     * @description This test verifies that the UsersList component displays an appropriate message when no user data is provided.
+     *
+     * This test verifies that the UsersList component displays an appropriate message when no user data is provided.
      */
     test('renders an empty list message when no users are provided', () => {
         render(<UsersList users={[]} />);

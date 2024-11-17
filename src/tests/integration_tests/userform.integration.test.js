@@ -6,7 +6,6 @@ import {toast} from 'react-toastify';
 /**
  * Mocks the `react-toastify` library for testing purposes.
  *
- * @module react-toastify.mock
  *
  * This mock implementation overrides the `toast.success` method from `react-toastify`
  * to allow for testing of toast notifications in a controlled environment without
@@ -27,10 +26,6 @@ jest.mock('react-toastify', () => ({
 
 /**
  * A mock function for handling user registration events.
- *
- * @constant
- * @type {jest.Mock}
- *
  * `onRegisterMock` is a mock function that simulates the registration process
  * in tests. It is typically used to track and assert that the correct behavior
  * happens when a user attempts to register.
