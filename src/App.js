@@ -1,7 +1,7 @@
 // src/App.js
 
-import React, { useState } from 'react';
-import { Container, Typography } from '@mui/material';
+import React, {useState} from 'react';
+import {Container, Typography} from '@mui/material';
 import UserForm from "./components/UserForm";
 import UsersList from "./components/UsersList";
 
@@ -48,15 +48,12 @@ function App() {
                 S'inscrire
             </Typography>
             {/* Registration form, passing the handleRegister function as a prop */}
-            <UserForm onRegister={handleRegister} />
+            <UserForm onRegister={handleRegister}/>
             {/* List of registered users, passing the list of users as a prop */}
-            <UsersList users={users} />
+            <UsersList users={users}/>
         </Container>
     );
 }
 
 // Exporting the App component so it can be used in other files
 export default App;
-
-
-

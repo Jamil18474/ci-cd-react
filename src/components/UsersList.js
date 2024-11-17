@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, ListItem, ListItemText, Typography } from '@mui/material';
+import {List, ListItem, ListItemText, Typography} from '@mui/material';
 
 /**
  * Component that displays a list of registered users.
@@ -14,18 +14,18 @@ import { List, ListItem, ListItemText, Typography } from '@mui/material';
  *
  * @returns {JSX.Element} The rendered UsersList component.
  */
-const UsersList = ({ users }) => {
+const UsersList = ({users}) => {
     return (
         <div>
             <Typography variant="h5" gutterBottom>
                 Liste des utilisateurs inscrits
             </Typography>
             <List>
-                {users.map((user) => (
-                    <ListItem key={user.id}>
+                {users.map((user, index) => (
+                    <ListItem key={index}>
                         <ListItemText
                             primary={`${user.firstName} ${user.lastName}`}
-                            secondary={`Date de naissance: ${user.birthDate}, Ville: ${user.city}, Code postal: ${user.postalCode}`}
+                            secondary={`Ville: ${user.city}, Code postal: ${user.postalCode}`}
                         />
                     </ListItem>
                 ))}
@@ -35,4 +35,3 @@ const UsersList = ({ users }) => {
 };
 
 export default UsersList;
-

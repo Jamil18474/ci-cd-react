@@ -1,15 +1,14 @@
-import React, {useCallback, useState} from 'react';
-import { TextField, Button, Container, Typography, Grid2 } from '@mui/material';
+import React, { useState } from 'react';
+import { TextField, Button, Container, Grid2 } from '@mui/material';
+import { toast, ToastContainer } from 'react-toastify';
+import { isAgeValidFromBirthDate, isPostalCodeValid, isNameValid, isEmailValid } from '../validators/validators'; // Replace with your actual validators
+import 'react-toastify/dist/ReactToastify.css';
 
 /**
- * Component for user registration form.
- *
- * This component allows users to input their registration details and submit the form.
+ * UserForm component for user registration.
  *
  * @param {Object} props - The component props.
  * @param {function} props.onRegister - Callback function to handle user registration.
- * This function is called with the form data when the form is submitted.
- *
  * @returns {JSX.Element} The rendered UserForm component.
  */
 const UserForm = ({ onRegister }) => {
@@ -22,93 +21,232 @@ const UserForm = ({ onRegister }) => {
         postalCode: ''
     });
 
+    const [errors, setErrors] = useState({});
+
     /**
-     * Handles changes to the form fields.
+     * Handles empty input fields when the user focuses on them.
      *
-     * This function is called whenever a form field is changed. It updates the
-     * corresponding value in the form data state based on the input field's name
-     * and value.
-     * By using useCallback, we avoid recreating these functions on every render, which can be beneficial if the parent component re-renders frequently.
-     *
-     * @param {Object} e - The event object triggered by the input change.
-     * @param {string} e.target.name - The name of the input field that triggered the change.
-     * @param {string} e.target.value - The new value of the input field.
-     *
-     * @returns {void}
+     * @param {Object} e - The event object.
      */
-    const handleChange = useCallback((e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({ ...prevData, [name]: value }));
-    }, []);
 
+        // Update form data
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
+
+        // Immediate field validation
+        const validationError = validateField(name, value);
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validationError,
+        }));
+    };
 
     /**
-     * Handles the form submission.
+     * Handles empty input field when user focuses on.
      *
-     * This function is called when the form is submitted. It prevents the default
-     * form submission behavior, invokes the `onRegister` callback with the current
-     * form data, and then resets the form fields to their initial empty state.
-     * By using useCallback, we avoid recreating these functions on every render, which can be beneficial if the parent component re-renders frequently.
-     *
-     * @param {Object} e - The event object triggered by the form submission.
-     * @param {Event} e.preventDefault - Prevents the default form submission behavior.
-     *
-     * @returns {void}
+     * @param {Object} e - The event object.
      */
-    const handleSubmit = useCallback((e) => {
+    const handleFocus = (e) => {
+        const { name, value } = e.target;
+        const validationError = validateField(name, value);
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [name]: validationError,
+        }));
+    };
+
+    /**
+     * Validates a specific field based on its name and value.
+     *
+     * @param {string} name - The name of the field to validate.
+     * @param {string} value - The value of the field to validate.
+     * @returns {string} The validation error message, or an empty string if valid.
+     */
+    const validateField = (name, value) => {
+        const validationMap = {
+            firstName: { validator: isNameValid, errorMessage: "Prénom invalide." },
+            lastName: { validator: isNameValid, errorMessage: "Nom invalide." },
+            city: { validator: isNameValid, errorMessage: "Ville invalide." },
+            email: { validator: isEmailValid, errorMessage: "Email invalide." },
+            postalCode: { validator: isPostalCodeValid, errorMessage: "Code postal invalide." },
+            birthDate: { validator: isAgeValidFromBirthDate, errorMessage: "Vous devez avoir au moins 18 ans." },
+        };
+        const validation = validationMap[name];
+        return validation.validator(value) ? '' : validation.errorMessage;
+    };
+
+    /**
+     * Handles form submission, validates the form, and triggers registration.
+     *
+     * @param {Object} e - The event object.
+     */
+    const handleSubmit = (e) => {
         e.preventDefault();
-        onRegister(formData);
-        setFormData({
-            firstName: '',
-            lastName: '',
-            email: '',
-            birthDate: '',
-            city: '',
-            postalCode: ''
+        const submitValidation = () => {
+            isFormValid() && (() => {
+                onRegister({ ...formData });
+                toast.success("Inscription réussie");
+                resetForm();
+            })();
+        };
+
+        /**
+         * Resets the form data and errors.
+         */
+        const resetForm = () => {
+            setFormData({
+                firstName: '',
+                lastName: '',
+                email: '',
+                birthDate: '',
+                city: '',
+                postalCode: ''
+            });
+            setErrors({});
+        };
+        submitValidation();
+    };
+
+    /**
+     * Validates all fields in the form and returns any errors.
+     *
+     * @returns {Object} An object containing validation errors.
+     */
+    const validateFormAll = () => {
+        const newErrors = {};
+        Object.keys(formData).forEach((key) => {
+            const error = validateField(key, formData[key]);
+            if (error) newErrors[key] = error;
         });
-    }, [formData, onRegister]);
+        return Object.keys(newErrors).length === 0 ? {} : newErrors;
+    };
 
-    // We create an array of objects for the form fields and map them to reduce repetition.
-    const fields = [
-        { name: 'firstName', label: 'Prénom', type: 'text' },
-        { name: 'lastName', label: 'Nom', type: 'text' },
-        { name: 'email', label: 'Email', type: 'email' },
-        { name: 'birthDate', label: 'Date de naissance', type: 'date' },
-        { name: 'city', label: 'Ville', type: 'text' },
-        { name: 'postalCode', label: 'Code Postal', type: 'text' },
-    ];
-
+    /**
+     * Checks if the entire form is valid.
+     *
+     * @returns {boolean} True if the form is valid, false otherwise.
+     */
+    const isFormValid = () => {
+        const validationErrors = validateFormAll();
+        return Object.keys(validationErrors).length === 0;
+    };
 
     return (
         <Container>
-            <Typography variant="h4" gutterBottom>
-                Formulaire d'inscription
-            </Typography>
+            <h4>Formulaire d'inscription</h4>
             <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2}>
-                    {fields.map((field) => (
-                        <Grid2 size={{ xs: 12, sm: 6 }} key={field.name}>
-                            <TextField
-                                label={field.label}
-                                variant="outlined"
-                                InputLabelProps={{ shrink: true }}
-                                name={field.name}
-                                type={field.type}
-                                value={formData[field.name]}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                            />
-                        </Grid2>
-                    ))}
-
-                    <Button type="submit" variant="contained" color="primary">
-                        Enregistrer
-                    </Button>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            label="Prénom"
+                            name="firstName"
+                            type="text"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            fullWidth
+                            error={!!errors.firstName}
+                            helperText={errors.firstName || ''}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            label="Nom"
+                            name="lastName"
+                            type="text"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            fullWidth
+                            error={!!errors.lastName}
+                            helperText={errors.lastName || ''}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            fullWidth
+                            error={!!errors.email}
+                            helperText={errors.email || ''}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            label="Date de naissance"
+                            name="birthDate"
+                            type="date"
+                            value={formData.birthDate}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            fullWidth
+                            error={!!errors.birthDate}
+                            helperText={errors.birthDate || ''}
+                            InputLabelProps={{ shrink: true }}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            label="Ville"
+                            name="city"
+                            type="text"
+                            value={formData.city}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            fullWidth
+                            error={!!errors.city}
+                            helperText={errors.city || ''}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <TextField
+                            label="Code Postal"
+                            name="postalCode"
+                            type="text"
+                            value={formData.postalCode}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            fullWidth
+                            error={!!errors.postalCode}
+                            helperText={errors.postalCode || ''}
+                        />
+                    </Grid2>
+                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            disabled={!isFormValid()} // Check if the form is valid
+                        >
+                            Enregistrer
+                        </Button>
+                    </Grid2>
                 </Grid2>
             </form>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={true}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                style={{ zIndex: 9999 }} // Ensure the toast is above other elements
+                bodyStyle={{ fontSize: '16px' }} // Adjust font size if necessary
+                toastStyle={{ padding: '10px', borderRadius: '5px' }} // Adjust toast style
+            />
         </Container>
     );
-}
+};
 
 export default UserForm;
+
