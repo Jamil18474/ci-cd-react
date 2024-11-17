@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
-import { TextField, Button, Container, Grid2 } from '@mui/material';
-import { toast, ToastContainer } from 'react-toastify';
-import { isAgeValidFromBirthDate, isPostalCodeValid, isNameValid, isEmailValid } from '../validators/validators'; // Replace with your actual validators
+import React, {useState} from 'react';
+import {TextField, Button, Container, Grid2} from '@mui/material';
+import {toast, ToastContainer} from 'react-toastify';
+import {isAgeValidFromBirthDate, isPostalCodeValid, isNameValid, isEmailValid} from '../validators/validators'; // Replace with your actual validators
 import 'react-toastify/dist/ReactToastify.css';
 
 /**
- * UserForm component for user registration.
+ * UserForm component for user registration. This component handles the input fields,
+ * validates the data, and stores the valid data in the localStorage.
  *
  * @param {Object} props - The component props.
  * @param {function} props.onRegister - Callback function to handle user registration.
  * @returns {JSX.Element} The rendered UserForm component.
  */
-const UserForm = ({ onRegister }) => {
+const UserForm = ({onRegister}) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -29,7 +30,7 @@ const UserForm = ({ onRegister }) => {
      * @param {Object} e - The event object.
      */
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
 
         // Update form data
         setFormData((prevFormData) => ({
@@ -51,7 +52,7 @@ const UserForm = ({ onRegister }) => {
      * @param {Object} e - The event object.
      */
     const handleFocus = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         const validationError = validateField(name, value);
         setErrors((prevErrors) => ({
             ...prevErrors,
@@ -68,19 +69,20 @@ const UserForm = ({ onRegister }) => {
      */
     const validateField = (name, value) => {
         const validationMap = {
-            firstName: { validator: isNameValid, errorMessage: "Prénom invalide." },
-            lastName: { validator: isNameValid, errorMessage: "Nom invalide." },
-            city: { validator: isNameValid, errorMessage: "Ville invalide." },
-            email: { validator: isEmailValid, errorMessage: "Email invalide." },
-            postalCode: { validator: isPostalCodeValid, errorMessage: "Code postal invalide." },
-            birthDate: { validator: isAgeValidFromBirthDate, errorMessage: "Vous devez avoir au moins 18 ans." },
+            firstName: {validator: isNameValid, errorMessage: "Prénom invalide."},
+            lastName: {validator: isNameValid, errorMessage: "Nom invalide."},
+            city: {validator: isNameValid, errorMessage: "Ville invalide."},
+            email: {validator: isEmailValid, errorMessage: "Email invalide."},
+            postalCode: {validator: isPostalCodeValid, errorMessage: "Code postal invalide."},
+            birthDate: {validator: isAgeValidFromBirthDate, errorMessage: "Vous devez avoir au moins 18 ans."},
         };
         const validation = validationMap[name];
         return validation.validator(value) ? '' : validation.errorMessage;
     };
 
     /**
-     * Handles form submission, validates the form, and triggers registration.
+     * Handles form submission, validates the form, and stores the data in localStorage if valid.
+     * If the form is valid, it will also call the `onRegister` callback with the form data.
      *
      * @param {Object} e - The event object.
      */
@@ -88,7 +90,9 @@ const UserForm = ({ onRegister }) => {
         e.preventDefault();
         const submitValidation = () => {
             isFormValid() && (() => {
-                onRegister({ ...formData });
+                // Save form data to localStorage
+                localStorage.setItem("userData", JSON.stringify(formData));
+                onRegister({...formData});
                 toast.success("Inscription réussie");
                 resetForm();
             })();
@@ -140,7 +144,7 @@ const UserForm = ({ onRegister }) => {
             <h4>Formulaire d'inscription</h4>
             <form onSubmit={handleSubmit}>
                 <Grid2 container spacing={2}>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <TextField
                             label="Prénom"
                             name="firstName"
@@ -153,7 +157,7 @@ const UserForm = ({ onRegister }) => {
                             helperText={errors.firstName || ''}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <TextField
                             label="Nom"
                             name="lastName"
@@ -166,7 +170,7 @@ const UserForm = ({ onRegister }) => {
                             helperText={errors.lastName || ''}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <TextField
                             label="Email"
                             name="email"
@@ -179,7 +183,7 @@ const UserForm = ({ onRegister }) => {
                             helperText={errors.email || ''}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <TextField
                             label="Date de naissance"
                             name="birthDate"
@@ -190,10 +194,10 @@ const UserForm = ({ onRegister }) => {
                             fullWidth
                             error={!!errors.birthDate}
                             helperText={errors.birthDate || ''}
-                            InputLabelProps={{ shrink: true }}
+                            InputLabelProps={{shrink: true}}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <TextField
                             label="Ville"
                             name="city"
@@ -206,7 +210,7 @@ const UserForm = ({ onRegister }) => {
                             helperText={errors.city || ''}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <TextField
                             label="Code Postal"
                             name="postalCode"
@@ -219,7 +223,7 @@ const UserForm = ({ onRegister }) => {
                             helperText={errors.postalCode || ''}
                         />
                     </Grid2>
-                    <Grid2 size={{ xs: 12, sm: 6 }}>
+                    <Grid2 size={{xs: 12, sm: 6}}>
                         <Button
                             type="submit"
                             variant="contained"
@@ -240,9 +244,9 @@ const UserForm = ({ onRegister }) => {
                 pauseOnFocusLoss
                 draggable
                 pauseOnHover
-                style={{ zIndex: 9999 }} // Ensure the toast is above other elements
-                bodyStyle={{ fontSize: '16px' }} // Adjust font size if necessary
-                toastStyle={{ padding: '10px', borderRadius: '5px' }} // Adjust toast style
+                style={{zIndex: 9999}} // Ensure the toast is above other elements
+                bodyStyle={{fontSize: '16px'}} // Adjust font size if necessary
+                toastStyle={{padding: '10px', borderRadius: '5px'}} // Adjust toast style
             />
         </Container>
     );
