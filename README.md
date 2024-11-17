@@ -4,6 +4,20 @@ A simple React application that allows users to register by filling out a form w
 
 ---
 
+## Summary
+
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [GitHub Actions CI/CD](#github-actions-cicd)
+- [Running Tests](#running-tests)
+- [Deployment](#deployment)
+- [Technologies Used](#technologies-used)
+- [NPM Package Build and Publish](#npm-package-build-and-publish)
+
+
+---
+
 ## Prerequisites
 
 Before you can run this project, make sure you have the following installed:
@@ -106,6 +120,31 @@ The app is deployed to GitHub Pages using GitHub Actions. To deploy, simply push
 
 ---
 
+## NPM Package Build and Publish
+
+This project includes automation for building, versioning, and publishing the NPM package to the NPM registry. Below are the key steps involved:
+
+    Configure Git: Git user settings are configured to automatically commit with the correct user information:
+
+git config --global user.email "loise.fenoll@ynov.com"
+git config --global user.name "Loise Fenoll"
+
+Build the NPM Package: The NPM package is built using the following command, which compiles the necessary files for publishing:
+
+npm run build-npm
+
+Versioning: The version of the package is bumped (using the patch version increment):
+
+npm version patch
+
+Publish: After building and versioning, the package is automatically published to the NPM registry:
+
+npm publish
+
+NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_TOKEN) is used for secure publishing.
+
+---
+
 ## Technologies Used
 
     React: JavaScript library for building the user interface.
@@ -113,9 +152,9 @@ The app is deployed to GitHub Pages using GitHub Actions. To deploy, simply push
     Jest: Testing framework for React.
     Codecov: Code coverage tool integrated with the GitHub repository.
     GitHub Actions: CI/CD pipeline for automatic testing, building, and deployment.
+    npm: Package manager used to install dependencies and automate build tasks.
 
---- 
-
+---
 
 ### Explanation of Sections:
 
@@ -126,6 +165,7 @@ The app is deployed to GitHub Pages using GitHub Actions. To deploy, simply push
 - **Running Tests**: Instructions for running unit tests and checking code coverage reports via Codecov.
 - **Deployment**: Process of automatic deployment via GitHub Actions to GitHub Pages.
 - **Technologies Used**: List of the main technologies used in the project.
+- **NPM Package Build** and Publish: Steps for automating the NPM package build, versioning, and publishing process.
 
 This `README.md` file contains all the necessary information to get started, test, and deploy your project with detailed instructions.
 
