@@ -12,8 +12,9 @@ A simple React application that allows users to register by filling out a form w
 - [GitHub Actions CI/CD](#github-actions-cicd)
 - [Running Tests](#running-tests)
 - [Deployment](#deployment)
-- [Technologies Used](#technologies-used)
 - [NPM Package Build and Publish](#npm-package-build-and-publish)
+- [Technologies Used](#technologies-used)
+
 
 
 ---
