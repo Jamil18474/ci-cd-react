@@ -53,10 +53,6 @@ jobs:
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      - name: Set Git Remote URL with Access Token
-        run: git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/Jamil18474/ci-cd-react
-
-
       # 6. Step to increment the version in the package.json file
       - name: Increment version
         run: |
@@ -75,6 +71,7 @@ jobs:
         run: |
           # Configure the email and username for Git
           # This information will be used for the commit
+          git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/Jamil18474/ci-cd-react
           git config --global user.email "jamil.abdelhamid@ynov.com"
           git config --global user.name "Jamil18474"
           
