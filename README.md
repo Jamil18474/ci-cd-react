@@ -193,4 +193,3 @@ NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_
 
 This `README.md` file contains all the necessary information to get started, test, and deploy your project with detailed
 instructions.
-
