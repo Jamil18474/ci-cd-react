@@ -49,11 +49,15 @@ jobs:
           # Run unit tests
           npm test
 
-      # 4. Authenticate with NPM using an authentication token.
+      # 5. Set the Git remote URL to use an access token for authentication.
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      # 5. Step to increment the version in the package.json file
+      - name: Set Git Remote URL with Access Token
+        run: git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/nom-repo
+
+
+      # 6. Step to increment the version in the package.json file
       - name: Increment version
         run: |
           node -e "
@@ -66,7 +70,7 @@ jobs:
             console.log('Updated version to:', packageJson.version);
           "
 
-      # 6. Step to commit the changes in the package.json file
+      # 7. Step to commit the changes in the package.json file
       - name: Commit version change
         run: |
           # Configure the email and username for Git
@@ -85,9 +89,9 @@ jobs:
           git push
         env:
           # Pass the GitHub token for authentication during the push
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
 
-      # 7. Configure git, build, version, and publish the package on NPM.
+      # 8. Configure git, build, version, and publish the package on NPM.
       - name: Build and publish package on NPM 📦
         run: |
           # Configure Git with user information
@@ -106,12 +110,12 @@ jobs:
           # NPM authentication token
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # 8. Configure Pages to deploy the built app to GitHub Pages.
+      # 9. Configure Pages to deploy the built app to GitHub Pages.
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
 
-      # 9. Upload build artifacts to GitHub Pages.
+      # 10. Upload build artifacts to GitHub Pages.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
@@ -119,7 +123,7 @@ jobs:
           path: build
           if-no-files-found: error
 
-      # 10. Upload coverage reports to Codecov for coverage tracking.
+      # 11. Upload coverage reports to Codecov for coverage tracking.
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
