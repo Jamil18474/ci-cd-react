@@ -85,7 +85,7 @@ jobs:
           git push
         env:
           # Pass the GitHub token for authentication during the push
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
