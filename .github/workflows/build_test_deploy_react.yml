@@ -53,6 +53,42 @@ jobs:
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
+      # Step to increment the version in the package.json file
+      - name: Increment version
+        run: |
+          node -e "
+            const fs = require('fs');
+            const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            const versionParts = packageJson.version.split('.').map(Number);
+            versionParts[2] += 1; // Increment the patch version
+            packageJson.version = versionParts.join('.');
+            fs.writeFileSync('package.json', JSON.stringify(packageJson, null, 2));
+            console.log('Updated version to:', packageJson.version);
+          "
+
+      # Step to commit the changes in the package.json file
+      - name: Commit version change
+        run: |
+          # Configure the email and username for Git
+          # This information will be used for the commit
+          git config --global user.email "your_email@example.com"
+          git config --global user.name "Your Name"
+          
+          # Add the package.json file to the changes to be committed
+          git add package.json
+          
+          # Create a commit with a message describing the change
+          git commit -m "ci: increment package version"
+          
+          
+          # Push the changes to the remote repository
+          git push
+        env:
+          # Pass the GitHub token for authentication during the push
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+
       # 5. Configure git, build, version, and publish the package on NPM.
       - name: Build and publish package on NPM 📦
         run: |

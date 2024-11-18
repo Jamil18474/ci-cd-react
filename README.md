@@ -9,8 +9,9 @@ A simple React application that allows users to register by filling out a form w
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Available Scripts](#available-scripts)
-- [GitHub Actions CI/CD](#github-actions-cicd)
 - [Running Tests](#running-tests)
+- [Generate API Documentation](#generate-api-documentation)
+- [GitHub Actions CI/CD](#github-actions-cicd)
 - [Deployment](#deployment)
 - [NPM Package Build and Publish](#npm-package-build-and-publish)
 - [Technologies Used](#technologies-used)
@@ -89,15 +90,6 @@ Your app is ready to be deployed!
 
 ---
 
-## GitHub Actions CI/CD
-
-This project is configured with GitHub Actions for continuous integration and deployment (CI/CD). The following steps are automated:
-
-    Build and Test: Tests are automatically run, and code coverage is reported to Codecov.
-    Deployment: The app is automatically deployed to GitHub Pages when code is pushed to the master branch.
-
----
-
 ## Running Tests
 
 1. Run Unit and Integration Tests
@@ -114,6 +106,27 @@ This will start Jest in watch mode, running all the tests defined in your projec
 Codecov integration is set up to track test coverage. After running the tests, the coverage report will be uploaded automatically to Codecov. You can view the coverage details on the Codecov website.
 
 ---
+
+## Generate API Documentation
+
+To generate API documentation for the project using JSDoc, run the following command:
+
+```bash
+npm run jsdoc
+```
+
+This will create a docs folder containing the generated documentation based on the comments in your code.
+
+---
+## GitHub Actions CI/CD
+
+This project is configured with GitHub Actions for continuous integration and deployment (CI/CD). The following steps are automated:
+
+    Build and Test: Tests are automatically run, and code coverage is reported to Codecov.
+    Deployment: The app is automatically deployed to GitHub Pages when code is pushed to the master branch.
+
+---
+
 
 ## Deployment
 
@@ -152,6 +165,7 @@ NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_
     Material-UI: React components that implement Google's Material Design.
     Jest: Testing framework for React.
     Codecov: Code coverage tool integrated with the GitHub repository.
+    JSDoc: Tool for generating API documentation from comments in the code.
     GitHub Actions: CI/CD pipeline for automatic testing, building, and deployment.
     npm: Package manager used to install dependencies and automate build tasks.
 
@@ -162,8 +176,9 @@ NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_
 - **Prerequisites**: List of tools required to run the project (Node.js and npm).
 - **Getting Started**: Instructions to clone the project and install dependencies.
 - **Available Scripts**: Basic commands to run the application (`npm run start`), launch tests (`npm run test`), and create a production build (`npm run build`).
-- **GitHub Actions CI/CD**: Explanation of the CI/CD process configured with GitHub Actions to automate the build, tests, and deployment to GitHub Pages.
 - **Running Tests**: Instructions for running unit tests and checking code coverage reports via Codecov.
+- **Generate API Documentation**: Instructions for generating API documentation using JSDoc.
+- **GitHub Actions CI/CD**: Explanation of the CI/CD process configured with GitHub Actions to automate the build, tests, and deployment to GitHub Pages.
 - **Deployment**: Process of automatic deployment via GitHub Actions to GitHub Pages.
 - **Technologies Used**: List of the main technologies used in the project.
 - **NPM Package Build** and Publish: Steps for automating the NPM package build, versioning, and publishing process.

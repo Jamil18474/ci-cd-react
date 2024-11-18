@@ -68,7 +68,6 @@ export const isEmailValid = (email) => {
         return false; // Return false if email is null, undefined, empty, or only spaces
     }
     // Regular expression to validate the email
-    const emailRegex = /^(?!.*\.\.)(?!.*@.*@)[^\s@!]+@[^\s@!]+\.[^\s@!]+$/;
-
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]{2,})+$/;
     return emailRegex.test(email);
 };

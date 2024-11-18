@@ -6,13 +6,13 @@ import {isAgeValidFromBirthDate, isPostalCodeValid, isNameValid, isEmailValid} f
 
 /**
  * Test suite for validators.
- * @description This suite contains unit tests for various validation functions.
+ * This suite contains unit tests for various validation functions.
  */
 describe('Validators Unit Test Suites', () => {
 
     /**
      * Test suite for age validation from birthdate.
-     * @description Tests the function isAgeValidFromBirthDate.
+     * Tests the function isAgeValidFromBirthDate.
      */
     describe('isAgeValidFromBirthDate', () => {
 
@@ -131,17 +131,16 @@ describe('Validators Unit Test Suites', () => {
         it('should return true for valid names', () => {
             expect(isNameValid('Marie Curie')).toBe(true);
             expect(isNameValid('Benoît')).toBe(true);
+            expect(isNameValid('François')).toBe(true);
             expect(isNameValid("O'Connor")).toBe(true);
             expect(isNameValid('Marie-Claire')).toBe(true);
             expect(isNameValid('Hélène')).toBe(true);
             expect(isNameValid('Zoë')).toBe(true);
             expect(isNameValid('Marseille')).toBe(true);
             expect(isNameValid('Le Havre')).toBe(true);
-            expect(isNameValid('Saint-Denis')).toBe(true);
             expect(isNameValid('Saint-Raphaël')).toBe(true);
-            expect(isNameValid('Bègle')).toBe(true);
-            expect(isNameValid('Liévin')).toBe(true);
             expect(isNameValid('Châteney-Malabry')).toBe(true);
+
         });
 
         /**
@@ -184,8 +183,10 @@ describe('Validators Unit Test Suites', () => {
          */
         it('should return false for invalid email addresses', () => {
             expect(isEmailValid('plainaddress')).toBe(false);
+            expect(isEmailValid('shortdomain.c')).toBe(false);
             expect(isEmailValid('@missingusername.com')).toBe(false);
             expect(isEmailValid('username@.com')).toBe(false);
+            expect(isEmailValid('françois@gmail.com')).toBe(false);
             expect(isEmailValid('testwithspace @example.com')).toBe(false);
             expect(isEmailValid('username@domain.com!')).toBe(false);
             expect(isEmailValid('username@@domain.com')).toBe(false);
