@@ -163,7 +163,6 @@ describe('Validators Unit Test Suites', () => {
      * @description Tests the function isEmailValid.
      */
     describe('isEmailValid Unit Test Suites', () => {
-
         /**
          * Test case for valid email addresses.
          * @test
