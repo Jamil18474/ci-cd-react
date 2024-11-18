@@ -85,9 +85,7 @@ jobs:
           git push
         env:
           # Pass the GitHub token for authentication during the push
-          GITHUB_TOKEN: ${{ secrets.MY_GITHUB_TOKEN }}
-
-
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # 7. Configure git, build, version, and publish the package on NPM.
       - name: Build and publish package on NPM 📦
