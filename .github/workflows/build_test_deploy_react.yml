@@ -54,7 +54,7 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       - name: Set Git Remote URL with Access Token
-        run: git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/nom-repo
+        run: git remote set-url origin https://x-access-token:${{ secrets.MY_GITHUB_TOKEN }}@github.com/ci-cd-react
 
 
       # 6. Step to increment the version in the package.json file
