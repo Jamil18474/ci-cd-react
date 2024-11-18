@@ -53,7 +53,7 @@ jobs:
       - name: Authenticate with npm
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
-      # Step to increment the version in the package.json file
+      # 5. Step to increment the version in the package.json file
       - name: Increment version
         run: |
           node -e "
@@ -66,13 +66,13 @@ jobs:
             console.log('Updated version to:', packageJson.version);
           "
 
-      # Step to commit the changes in the package.json file
+      # 6. Step to commit the changes in the package.json file
       - name: Commit version change
         run: |
           # Configure the email and username for Git
           # This information will be used for the commit
-          git config --global user.email "your_email@example.com"
-          git config --global user.name "Your Name"
+          git config --global user.email "jamil.abdelhamid@ynov.com"
+          git config --global user.name "Jamil18474"
           
           # Add the package.json file to the changes to be committed
           git add package.json
@@ -89,7 +89,7 @@ jobs:
 
 
 
-      # 5. Configure git, build, version, and publish the package on NPM.
+      # 7. Configure git, build, version, and publish the package on NPM.
       - name: Build and publish package on NPM 📦
         run: |
           # Configure Git with user information
@@ -108,12 +108,12 @@ jobs:
           # NPM authentication token
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # 6. Configure Pages to deploy the built app to GitHub Pages.
+      # 8. Configure Pages to deploy the built app to GitHub Pages.
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v3
 
-      # 7. Upload build artifacts to GitHub Pages.
+      # 9. Upload build artifacts to GitHub Pages.
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v2
         with:
@@ -121,7 +121,7 @@ jobs:
           path: build
           if-no-files-found: error
 
-      # 8. Upload coverage reports to Codecov for coverage tracking.
+      # 10. Upload coverage reports to Codecov for coverage tracking.
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
