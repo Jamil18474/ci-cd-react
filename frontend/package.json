@@ -19,12 +19,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-npm": "cross-env NODE_ENV=production && rimraf dist && mkdir dist && npx babel src --out-dir dist --copy-files",
+    "build-npm": "cross-env NODE_ENV=production && rimraf dist && mkdir dist && npx babel frontend/src --out-dir dist --copy-files",
     "test": "react-scripts test --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
-    "jsdoc": "jsdoc -R ./README.md -c ./jsdoc.config.json -r -d ./public/docs"
+    "jsdoc": "jsdoc -R ../README.md -c ./jsdoc.config.json -r -d frontend/public/docs"
   },
   "eslintConfig": {
     "extends": [

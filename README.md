@@ -145,8 +145,8 @@ the key steps involved:
 
     Configure Git: Git user settings are configured to automatically commit with the correct user information:
 
-git config --global user.email "loise.fenoll@ynov.com"
-git config --global user.name "Loise Fenoll"
+git config --global user.email "jamil.abdelhamid@ynov.com"
+git config --global user.name "Jamil18474"
 
 Build the NPM Package: The NPM package is built using the following command, which compiles the necessary files for
 publishing:

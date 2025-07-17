@@ -1,0 +1,18 @@
+services:
+  mongodb:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: user_management_db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_DATABASE: user_management
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+
+volumes:
+  mongodb_data:
