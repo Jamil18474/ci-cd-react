@@ -1,15 +1,37 @@
-db = db.getSiblingDB("user_management");
+/**
+ * MongoDB initialization script for admin user
+ * Creates default administrator account if it doesn't exist
+ */
+db = db.getSiblingDB(process.env.MONGO_INITDB_DATABASE );
 
 db.createCollection('users');
 
-db.users.insertOne({
-    firstName: 'Administrateur',
-    lastName: 'Système',
-    email: 'admin@usermanagement.com',
-    password: "$2b$10$rQZ9tHlG8LZYzZkJ8JGQKePHfLJc9XqC6h1FRrW8yXvG9b4HfF5Sm",
-    birthDate: "1995-01-01T00:00:00.000Z",
-    city: "Paris",
-    zipcode: "75001",
-    role: "admin",
-    permissions: ["read", "delete"]
-});
+const adminEmail = process.env.ADMIN_EMAIL;
+const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
+
+if (!adminEmail || !adminPasswordHash) {
+    print('❌ ADMIN_EMAIL and ADMIN_PASSWORD_HASH required');
+    quit(1);
+}
+
+const existingAdmin = db.users.findOne({ email: adminEmail });
+
+if (!existingAdmin) {
+    const result = db.users.insertOne({
+        firstName: 'Marie',
+        lastName: 'Dubois',
+        email: adminEmail,
+        password: adminPasswordHash,
+        birthDate: new Date('1990-01-01'), // Date générique - sera cachée aux users
+        city: 'Lyon',
+        postalCode: '69001',
+        role: 'admin',
+        permissions: ['read', 'delete'],
+        createdAt: new Date(),
+        updatedAt: new Date()
+    });
+
+    if (result.acknowledged) {
+        print('✅ Admin user created');
+    }
+}

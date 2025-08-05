@@ -1,18 +1,27 @@
+# Docker Compose for MongoDB database
 services:
   mongodb:
     build:
       context: .
       dockerfile: docker/Dockerfile
+
     container_name: user_management_db
+
     environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: password
-      MONGO_INITDB_DATABASE: user_management
+      # Variables MongoDB
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
+
+      # Variables admin
+      ADMIN_EMAIL: ${ADMIN_EMAIL}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
+
     ports:
       - "27017:27017"
+
     volumes:
       - mongodb_data:/data/db
-
 
 volumes:
   mongodb_data:
