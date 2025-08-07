@@ -1,59 +1,93 @@
-// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import { ToastContainer } from 'react-toastify';
+import { AuthProvider } from './contexts/AuthContext';
 
-import React, {useState} from 'react';
-import {Container, Typography} from '@mui/material';
-import UserForm from "./components/UserForm";
-import UsersList from "./components/UsersList";
+// Import des pages
+import HomePage from './pages/HomePage';           // Landing page
+import LoginPage from './pages/LoginPage';         // Page de connexion
+import RegisterPage from './pages/RegisterPage';   // Page d'inscription
+import UsersListPage from './pages/UsersListPage'; // Page liste utilisateurs
+import AdminDashboard from './pages/AdminDashboard';
 
-/**
- * Main component of the application.
- *
- * This component manages the state of registered users and renders the registration form
- * as well as the list of users.
- *
- * @component
- * @returns {JSX.Element} The rendered App component.
- */
+// Import des composants
+import PrivateRoute from './components/auth/PrivateRoute';
+
+// Import des styles
+import 'react-toastify/dist/ReactToastify.css';
+
+const theme = createTheme({
+    palette: {
+        mode: 'light',
+        primary: {
+            main: '#1976d2',
+        },
+        secondary: {
+            main: '#dc004e',
+        },
+    },
+});
+
 function App() {
-    // State to store the list of registered users
-    const [users, setUsers] = useState([]);
+    const basename = process.env.NODE_ENV === 'production' ? '/ci-cd-react' : '';
 
-    /**
-     * Handles the registration of a new user.
-     *
-     * This function updates the state of registered users by adding the new user
-     * to the existing list of users. It uses the functional form of setState to
-     * ensure that the most recent state is used.
-     *
-     * @param {Object} newUser - The object representing the new user.
-     * @param {string} newUser.firstName - The first name of the user.
-     * @param {string} newUser.lastName - The last name of the user.
-     * @param {string} newUser.email - The email of the user.
-     * @param {string} newUser.birthDate - The birthdate of the user.
-     * @param {string} newUser.city - The city of the user.
-     * @param {string} newUser.postalCode - The postal code of the user.
-     *
-     * @returns {void}
-     */
-    const handleRegister = (newUser) => {
-        setUsers((prevUsers) => [...prevUsers, newUser]);
-    };
-
-
-    // Render the component
     return (
-        <Container>
-            {/* Page title */}
-            <Typography variant="h4" gutterBottom>
-                S'inscrire
-            </Typography>
-            {/* Registration form, passing the handleRegister function as a prop */}
-            <UserForm onRegister={handleRegister}/>
-            {/* List of registered users, passing the list of users as a prop */}
-            <UsersList users={users}/>
-        </Container>
+        <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <AuthProvider>
+                <Router basename={basename}>
+                    <div className="App">
+                        <Routes>
+                            {/* Page d'accueil - Landing page */}
+                            <Route path="/" element={<HomePage />} />
+
+                            {/* Page de connexion */}
+                            <Route path="/login" element={<LoginPage />} />
+
+                            {/* Page d'inscription */}
+                            <Route path="/register" element={<RegisterPage />} />
+
+                            {/* Page liste des utilisateurs - PROTÉGÉE (connexion obligatoire) */}
+                            <Route
+                                path="/users"
+                                element={
+                                    <PrivateRoute>
+                                        <UsersListPage />
+                                    </PrivateRoute>
+                                }
+                            />
+
+                            {/* Dashboard admin (protégé) */}
+                            <Route
+                                path="/admin"
+                                element={
+                                    <PrivateRoute adminOnly={true}>
+                                        <AdminDashboard />
+                                    </PrivateRoute>
+                                }
+                            />
+
+
+
+                            {/* Redirection pour URLs non trouvées */}
+                            <Route path="*" element={<Navigate to="/" replace />} />
+                        </Routes>
+
+                        <ToastContainer
+                            position="top-right"
+                            autoClose={5000}
+                            hideProgressBar={false}
+                            closeOnClick
+                            pauseOnHover
+                            theme="light"
+                        />
+                    </div>
+                </Router>
+            </AuthProvider>
+        </ThemeProvider>
     );
 }
 
-// Exporting the App component so it can be used in other files
 export default App;

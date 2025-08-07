@@ -6,9 +6,9 @@
 on:
   # This triggers the workflow on push or pull request events, but only for the 'master' branch.
   push:
-    branches: [ master, develop ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master ]
 
 permissions: write-all
 
@@ -27,7 +27,7 @@ jobs:
     # Steps define the sequence of tasks that will be executed as part of the job.
     steps:
       # 1. Checkout the repository to the runner's workspace.
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         name: Checkout repository
 
       # 2. Set up Node.js with the specified version from the matrix (Node.js 20.x).
@@ -116,7 +116,7 @@ jobs:
 
       # 10. Upload build artifacts to GitHub Pages.
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           # Upload the entire 'build' directory for deployment.
           path: build
@@ -152,4 +152,4 @@ jobs:
       # 1. Deploy the application to GitHub Pages using the deploy-pages action.
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4

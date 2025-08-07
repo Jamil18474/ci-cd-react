@@ -2,7 +2,7 @@
  * @module validators.unit.test
  */
 
-import {isAgeValidFromBirthDate, isPostalCodeValid, isNameValid, isEmailValid} from '../../validators/validators';
+import {isAgeValidFromBirthDate, isPostalCodeValid, isNameValid, isEmailValid, isPasswordValid} from '../../validators/validators';
 
 /**
  * Test suite for validators.
@@ -197,5 +197,41 @@ describe('Validators Unit Test Suites', () => {
             expect(isEmailValid(undefined)).toBe(false);
         });
     });
+
+    /**
+     * Test suite for password validation.
+     * @description Tests the function isPasswordValid.
+     */
+    describe('isPasswordValid Unit Test Suites', () => {
+
+        /**
+         * Test case for valid passwords.
+         * @test
+         */
+        it('should return true for valid passwords', () => {
+            expect(isPasswordValid('123456')).toBe(true); // Exactly 6 characters
+            expect(isPasswordValid('password')).toBe(true); // More than 6 characters
+            expect(isPasswordValid('admin123')).toBe(true); // Valid password
+            expect(isPasswordValid('Test@123')).toBe(true); // Complex password
+            expect(isPasswordValid('MyPassword2024!')).toBe(true); // Long complex password
+            expect(isPasswordValid('azerty')).toBe(true); // Simple 6 character password
+        });
+
+        /**
+         * Test case for invalid passwords.
+         * @test
+         */
+        it('should return false for invalid passwords', () => {
+            expect(isPasswordValid('12345')).toBe(false); // Less than 6 characters
+            expect(isPasswordValid('abc')).toBe(false); // Too short
+            expect(isPasswordValid('')).toBe(false); // Empty string
+            expect(isPasswordValid(' ')).toBe(false); // Only space
+            expect(isPasswordValid('     ')).toBe(false); // Only spaces
+            expect(isPasswordValid(null)).toBe(false); // Null
+            expect(isPasswordValid(undefined)).toBe(false); // Undefined
+            expect(isPasswordValid('a')).toBe(false); // Single character
+        });
+    });
+
 });
 

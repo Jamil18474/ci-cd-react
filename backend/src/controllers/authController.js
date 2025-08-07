@@ -4,8 +4,6 @@ const User = require('../models/User');
 
 /**
  * Register new user
- * @param {Request} req - Express request
- * @param {Response} res - Express response
  */
 const register = async (req, res) => {
   try {
@@ -24,7 +22,7 @@ const register = async (req, res) => {
     const userData = {
       firstName,
       lastName,
-      email: email.trim(),
+      email: email.trim().toLowerCase(), // ✅ Normaliser l'email
       password,
       birthDate: new Date(birthDate),
       city,
@@ -34,6 +32,8 @@ const register = async (req, res) => {
 
     const user = new User(userData);
     const savedUser = await user.save();
+
+
 
     res.status(201).json({
       message: 'Votre compte a été créé avec succès !',
@@ -50,8 +50,6 @@ const register = async (req, res) => {
 
 /**
  * Authenticate user and return JWT token
- * @param {Request} req - Express request
- * @param {Response} res - Express response
  */
 const login = async (req, res) => {
   try {
@@ -61,7 +59,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Email et mot de passe requis.' });
     }
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email.trim().toLowerCase() });
 
     if (!user) {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
@@ -73,20 +71,35 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
-    const token = jwt.sign(
-      {
-        userId: user._id,
-        email: user.email,
-        role: user.role,
-        permissions: user.permissions
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: process.env.JWT_EXPIRES_IN }
-    );
+    // ✅ CRÉATION TOKEN avec durée explicite
+    const tokenPayload = {
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+      permissions: user.permissions,
+      firstName: user.firstName, // ✅ Ajouter pour éviter les requêtes supplémentaires
+      lastName: user.lastName
+    };
+
+    const jwtOptions = {
+      expiresIn: process.env.JWT_EXPIRES_IN || '24h',
+      issuer: 'user-management-api',
+      audience: 'user-management-frontend'
+    };
+
+    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, jwtOptions);
+
+    // ✅ VÉRIFICATION DE LA DURÉE DU TOKEN
+    const decoded = jwt.decode(token);
+    const expiresAt = new Date(decoded.exp * 1000);
+
+
+
 
     res.json({
       message: 'Connexion réussie !',
       token,
+      expiresAt: expiresAt.toISOString(), // ✅ Informer le frontend de l'expiration
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -105,4 +118,22 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+/**
+ * ✅ NOUVEAU : Logout endpoint
+ */
+const logout = (req, res) => {
+  try {
+
+    res.json({
+      message: 'Déconnexion réussie',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Erreur lors de la déconnexion',
+      error: error.message
+    });
+  }
+};
+
+module.exports = { register, login, logout };

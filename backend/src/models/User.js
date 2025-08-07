@@ -3,16 +3,6 @@ const bcrypt = require('bcryptjs');
 
 /**
  * User schema for MongoDB
- * @typedef {Object} User
- * @property {string} firstName - User's first name
- * @property {string} lastName - User's last name
- * @property {string} email - User's email (unique)
- * @property {string} password - Hashed password
- * @property {Date} birthDate - User's birthDate
- * @property {string} city - User's city
- * @property {string} postalCode - User's postal code
- * @property {string} role - User role ('user' | 'admin')
- * @property {string[]} permissions - User permissions array
  */
 const userSchema = new mongoose.Schema(
   {
@@ -26,7 +16,8 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: true
+      required: true,
+      unique: true // ✅ Ajouter unique pour éviter les doublons
     },
     password: {
       type: String,
@@ -53,11 +44,27 @@ const userSchema = new mongoose.Schema(
     permissions: {
       type: [String],
       enum: ['read', 'delete'],
-      default: ['read'],
+      default: function() {
+        // ✅ AMÉLIORATION : Admin a toutes les permissions par défaut
+        return this.role === 'admin' ? ['read', 'delete'] : ['read'];
+      },
       required: true
     }
+  },
+  {
+    timestamps: true // ✅ Ajouter createdAt et updatedAt automatiquement
   }
 );
+
+// ✅ Middleware pour s'assurer que les admins ont toutes les permissions
+userSchema.pre('save', function(next) {
+  if (this.role === 'admin') {
+    this.permissions = ['read', 'delete'];
+  } else if (this.role === 'user' && this.permissions.length === 0) {
+    this.permissions = ['read'];
+  }
+  next();
+});
 
 // Middleware pré-sauvegarde pour hasher le mot de passe
 userSchema.pre('save', async function (next) {
@@ -65,7 +72,7 @@ userSchema.pre('save', async function (next) {
 
   try {
     const salt = await bcrypt.genSalt(
-      parseInt(process.env.BCRYPT_ROUNDS)
+      parseInt(process.env.BCRYPT_ROUNDS) || 12
     );
     this.password = await bcrypt.hash(this.password, salt);
     next();

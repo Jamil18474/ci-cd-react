@@ -32,16 +32,23 @@ exports.authenticateToken = (req, res, next) => {
     if (err) {
       let errorMessage = 'Votre session a expiré, veuillez vous reconnecter.';
       let errorCode = 'TOKEN_EXPIRED';
+      let statusCode = 401; // ✅ CHANGEMENT ICI : 401 au lieu de 403
 
       if (err.name === 'JsonWebTokenError') {
         errorMessage = 'Token invalide, veuillez vous reconnecter.';
         errorCode = 'INVALID_TOKEN';
+        statusCode = 401; // ✅ Token invalide = 401
+      } else if (err.name === 'TokenExpiredError') {
+        errorMessage = 'Votre session a expiré, veuillez vous reconnecter.';
+        errorCode = 'TOKEN_EXPIRED';
+        statusCode = 401; // ✅ Token expiré = 401
       } else if (err.name === 'NotBeforeError') {
         errorMessage = 'Token pas encore valide.';
         errorCode = 'TOKEN_NOT_ACTIVE';
+        statusCode = 401; // ✅ Token pas encore actif = 401
       }
 
-      return res.status(403).json({
+      return res.status(statusCode).json({
         message: errorMessage,
         error: errorCode,
         timestamp: new Date().toISOString()
@@ -68,6 +75,7 @@ exports.requirePermission = (permission) => {
       });
     }
 
+
     if (!req.user.permissions || !req.user.permissions.includes(permission)) {
       let message = 'Vous n\'avez pas les droits nécessaires pour cette action.';
 
@@ -82,14 +90,18 @@ exports.requirePermission = (permission) => {
         message = `Permission '${permission}' requise pour cette action.`;
       }
 
+
+
       return res.status(403).json({
         message,
         error: 'INSUFFICIENT_PERMISSIONS',
         required_permission: permission,
         user_permissions: req.user.permissions || [],
+        user_role: req.user.role,
         timestamp: new Date().toISOString()
       });
     }
+
 
     next();
   };

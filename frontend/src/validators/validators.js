@@ -71,3 +71,17 @@ export const isEmailValid = (email) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]{2,})+$/;
     return emailRegex.test(email);
 };
+
+/**
+ * Checks if the password is valid.
+ * @param {string} password - The password to check.
+ * @returns {boolean} - True if the password is valid, otherwise false.
+ */
+export const isPasswordValid = (password) => {
+    // Check that password is not null, undefined, empty, or only spaces
+    if (password === null || password === undefined || typeof password !== 'string' || password.trim() === '') {
+        return false; // Return false if password is null, undefined, empty, or only spaces
+    }
+    // Password must be at least 6 characters long
+    return password.length >= 6;
+};
