@@ -70,23 +70,16 @@ const RegisterPage = () => {
         }
     };
 
-    /**
-     * Retourne à la page de connexion
-     */
-    const handleGoBack = () => {
-        navigate('/login');
-    };
-
     return (
         <Container maxWidth="md" sx={{ py: 4 }}>
             {/* Bouton retour */}
             <Button
                 startIcon={<ArrowBackIcon />}
-                onClick={handleGoBack}
+                onClick={() => navigate('/')}
                 sx={{ mb: 3 }}
                 variant="outlined"
             >
-                Retour à la connexion
+                Retour à l'accueil
             </Button>
 
             {/* En-tête */}
@@ -112,7 +105,7 @@ const RegisterPage = () => {
                     Vous avez déjà un compte ?{' '}
                     <Button
                         variant="text"
-                        onClick={handleGoBack}
+                        onClick={() => navigate('/login')}
                         sx={{ textDecoration: 'underline' }}
                     >
                         Connectez-vous ici

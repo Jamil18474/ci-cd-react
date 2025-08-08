@@ -1,11 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "type": "commonjs",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon --quiet src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "eslint src/",
