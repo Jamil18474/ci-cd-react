@@ -1,72 +1,41 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     Container,
     Typography,
     Box,
     Paper,
     Button,
-    Alert
+    Divider
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
-import UserForm from '../components/UserForm';
 import { toast } from 'react-toastify';
+import UserForm from '../components/UserForm';
 
 /**
- * Page d'inscription des nouveaux utilisateurs
- * UTILISE L'API BACKEND - PAS DE LOCALSTORAGE
+ * Page d'inscription des utilisateurs
  */
 const RegisterPage = () => {
-    const [loading, setLoading] = useState(false);
-    const { register } = useAuth();
     const navigate = useNavigate();
+    const { register } = useAuth();
 
     /**
-     * Gère l'inscription d'un nouvel utilisateur via API
+     * Gère l'inscription d'un nouvel utilisateur
      */
-    const handleUserRegister = async (userData) => {
-        setLoading(true);
-
+    const handleRegister = async (userData) => {
         try {
-
-
-            // APPEL API via le contexte d'authentification
             await register(userData);
 
-
-
-            // Afficher une notification de succès
-            toast.success(`Inscription réussie ! Bienvenue ${userData.firstName} ${userData.lastName}`);
-
-            // Rediriger vers la page de connexion après un délai
-            setTimeout(() => {
-                navigate('/login', {
-                    state: {
-                        message: 'Inscription réussie ! Vous pouvez maintenant vous connecter.',
-                        email: userData.email
-                    }
-                });
-            }, 2000);
+            // Succès - rediriger vers la connexion
+            toast.success('Inscription réussie ! Vous pouvez maintenant vous connecter.');
+            navigate('/login');
 
         } catch (error) {
-            // Gérer les erreurs spécifiques du backend
-            let errorMessage = 'Erreur lors de l\'inscription';
-
-            if (error.status === 400) {
-                if (error.message && error.message.includes('adresse email')) {
-                    errorMessage = 'Cette adresse email est déjà utilisée';
-                } else {
-                    errorMessage = error.message || 'Données invalides. Vérifiez vos informations.';
-                }
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-
-            toast.error(errorMessage);
-            throw new Error(errorMessage);
-        } finally {
-            setLoading(false);
+            // L'erreur est déjà gérée par le contexte Auth et UserForm
+            console.error('Erreur lors de l\'inscription:', error);
+            // Laisser UserForm gérer l'affichage des erreurs
+            throw error;
         }
     };
 
@@ -88,30 +57,30 @@ const RegisterPage = () => {
                     📝 Inscription
                 </Typography>
                 <Typography variant="h6" color="text.secondary">
-                    Créez votre compte pour accéder à la plateforme
+                    Créez votre compte utilisateur
                 </Typography>
             </Box>
-
-
 
             {/* Formulaire d'inscription */}
-            <UserForm
-                onRegister={handleUserRegister}
-                loading={loading}
-            />
+            <Paper elevation={3} sx={{ p: 4 }}>
+                <UserForm onRegister={handleRegister} />
 
-            <Box sx={{ mt: 4, textAlign: 'center' }}>
-                <Typography variant="body2" color="text.secondary">
-                    Vous avez déjà un compte ?{' '}
+                <Divider sx={{ my: 4 }} />
+
+                {/* Lien vers connexion */}
+                <Box sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                        Vous avez déjà un compte ?
+                    </Typography>
                     <Button
-                        variant="text"
+                        variant="outlined"
+                        fullWidth
                         onClick={() => navigate('/login')}
-                        sx={{ textDecoration: 'underline' }}
                     >
-                        Connectez-vous ici
+                        Se connecter
                     </Button>
-                </Typography>
-            </Box>
+                </Box>
+            </Paper>
         </Container>
     );
 };

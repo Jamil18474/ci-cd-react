@@ -4,147 +4,236 @@ import {
     Typography,
     Box,
     Button,
-    Grid,
     Card,
     CardContent,
-    Paper
+    Grid,
+    Paper,
+    Alert
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import {
+    Person as PersonIcon,
+    Login as LoginIcon,
+    PersonAdd as RegisterIcon,
+    Dashboard as DashboardIcon,
+    People as PeopleIcon,
+    AdminPanelSettings as AdminIcon
+} from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 /**
- * Page d'accueil - Interface simplifiée
+ * Page d'accueil principale
  */
 const HomePage = () => {
-    const { isAuthenticated, user } = useAuth();
+    const { isAuthenticated, user, isAdmin } = useAuth();
     const navigate = useNavigate();
 
-    // Si déjà connecté, redirection simple
-    if (isAuthenticated) {
-        return (
-            <Container maxWidth="md" sx={{ py: 4 }}>
-                <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
-                    <Typography variant="h4" gutterBottom color="primary">
-                        🎉 Bienvenue, {user?.firstName} !
-                    </Typography>
-
-                    <Typography variant="body1" sx={{ mb: 3 }}>
-                        Vous êtes connecté en tant que : <strong>{user?.firstName} {user?.lastName}</strong>
-                        {user?.role === 'admin' && ' (Administrateur)'}
-                    </Typography>
-
-                    <Box sx={{ mt: 3 }}>
-                        {/* UN SEUL BOUTON SELON LE RÔLE */}
-                        {user?.role === 'admin' ? (
-                            <Button
-                                variant="contained"
-                                size="large"
-                                onClick={() => navigate('/admin')}
-                                sx={{ mr: 2 }}
-                            >
-                                📊 Dashboard Administrateur
-                            </Button>
-                        ) : (
-                            <Button
-                                variant="contained"
-                                size="large"
-                                onClick={() => navigate('/users')}
-                                sx={{ mr: 2 }}
-                            >
-                                👥 Voir les utilisateurs
-                            </Button>
-                        )}
-                    </Box>
-                </Paper>
-            </Container>
-        );
-    }
-
-    // Page d'accueil pour visiteurs non connectés
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
+            {/* En-tête principal */}
             <Box sx={{ textAlign: 'center', mb: 6 }}>
+                <PersonIcon sx={{ fontSize: 80, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h2" component="h1" gutterBottom color="primary">
                     🌟 Plateforme Utilisateurs
                 </Typography>
                 <Typography variant="h5" color="text.secondary" sx={{ mb: 4 }}>
-                    Gérez vos utilisateurs en toute simplicité
-                </Typography>
-
-                <Box sx={{ mb: 4 }}>
-                    <Button
-                        variant="contained"
-                        size="large"
-                        onClick={() => navigate('/login')}
-                        sx={{ mr: 2, py: 1.5, px: 4 }}
-                    >
-                        🔐 Se connecter
-                    </Button>
-
-                    <Button
-                        variant="outlined"
-                        size="large"
-                        onClick={() => navigate('/register')}
-                        sx={{ py: 1.5, px: 4 }}
-                    >
-                        📝 S'inscrire
-                    </Button>
-                </Box>
-
-                <Typography variant="body2" color="text.secondary">
-                    Connectez-vous pour accéder à toutes les fonctionnalités
+                    Gestion moderne et sécurisée des comptes utilisateurs
                 </Typography>
             </Box>
 
-            {/* Section avantages */}
-            <Grid container spacing={4} sx={{ mb: 6 }}>
-                <Grid item xs={12} md={4}>
-                    <Card elevation={2}>
-                        <CardContent sx={{ textAlign: 'center', py: 4 }}>
-                            <Typography variant="h4" gutterBottom>🔒</Typography>
-                            <Typography variant="h6" gutterBottom>Sécurisé</Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Protection des données personnelles avec MongoDB
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
+            {/* Contenu principal selon l'état d'authentification */}
+            {!isAuthenticated ? (
+                // UTILISATEUR NON CONNECTÉ
+                <Box>
+                    {/* Actions principales */}
+                    <Grid container spacing={4} sx={{ mb: 6 }}>
+                        <Grid item xs={12} md={6}>
+                            <Card elevation={3} sx={{ height: '100%' }}>
+                                <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                                    <LoginIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                                    <Typography variant="h5" gutterBottom>
+                                        Se connecter
+                                    </Typography>
+                                    <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                                        Accédez à votre compte existant
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        onClick={() => navigate('/login')}
+                                        startIcon={<LoginIcon />}
+                                        fullWidth
+                                    >
+                                        🔐 Se connecter
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Grid>
 
-                <Grid item xs={12} md={4}>
-                    <Card elevation={2}>
-                        <CardContent sx={{ textAlign: 'center', py: 4 }}>
-                            <Typography variant="h4" gutterBottom>⚡</Typography>
-                            <Typography variant="h6" gutterBottom>Rapide</Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                API Node.js performante pour une expérience fluide
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Card elevation={3} sx={{ height: '100%' }}>
+                                <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                                    <RegisterIcon sx={{ fontSize: 60, color: 'secondary.main', mb: 2 }} />
+                                    <Typography variant="h5" gutterBottom>
+                                        S'inscrire
+                                    </Typography>
+                                    <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                                        Créez votre nouveau compte
+                                    </Typography>
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        onClick={() => navigate('/register')}
+                                        startIcon={<RegisterIcon />}
+                                        color="secondary"
+                                        fullWidth
+                                    >
+                                        📝 S'inscrire
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    </Grid>
 
-                <Grid item xs={12} md={4}>
-                    <Card elevation={2}>
-                        <CardContent sx={{ textAlign: 'center', py: 4 }}>
-                            <Typography variant="h4" gutterBottom>🎯</Typography>
-                            <Typography variant="h6" gutterBottom>Simple</Typography>
-                            <Typography variant="body2" color="text.secondary">
-                                Interface intuitive pour tous les utilisateurs
-                            </Typography>
-                        </CardContent>
-                    </Card>
-                </Grid>
-            </Grid>
+                    {/* Fonctionnalités */}
+                    <Paper elevation={2} sx={{ p: 4, textAlign: 'center' }}>
+                        <Typography variant="h4" gutterBottom>
+                            ✨ Fonctionnalités
+                        </Typography>
+                        <Grid container spacing={3} sx={{ mt: 2 }}>
+                            <Grid item xs={12} sm={4}>
+                                <Typography variant="h6" gutterBottom>
+                                    🔒 Sécurisé
+                                </Typography>
+                                <Typography variant="body2">
+                                    Authentification robuste et protection des données
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography variant="h6" gutterBottom>
+                                    👥 Communauté
+                                </Typography>
+                                <Typography variant="body2">
+                                    Découvrez et interagissez avec d'autres utilisateurs
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={4}>
+                                <Typography variant="h6" gutterBottom>
+                                    ⚡ Moderne
+                                </Typography>
+                                <Typography variant="body2">
+                                    Interface intuitive et expérience utilisateur optimale
+                                </Typography>
+                            </Grid>
+                        </Grid>
+                    </Paper>
+                </Box>
+            ) : (
+                // UTILISATEUR CONNECTÉ
+                <Box>
+                    {/* Message de bienvenue */}
+                    <Alert severity="success" sx={{ mb: 4 }}>
+                        <Typography variant="h6">
+                            🎉 Bienvenue, {user?.firstName} !
+                        </Typography>
+                    </Alert>
 
-            <Paper elevation={1} sx={{ p: 4, bgcolor: 'grey.50', textAlign: 'center' }}>
-                <Typography variant="h5" gutterBottom>
-                    💡 Comment ça marche ?
-                </Typography>
-                <Typography variant="body1" color="text.secondary">
-                    1. Créez votre compte ou connectez-vous<br />
-                    2. Consultez la liste des utilisateurs<br />
-                    3. Actions supplémentaires selon vos droits
-                </Typography>
-            </Paper>
+                    {/* Actions selon le rôle */}
+                    <Grid container spacing={4}>
+                        {/* ADMIN */}
+                        {isAdmin() ? (
+                            <>
+                                <Grid item xs={12} md={6}>
+                                    <Card elevation={3}>
+                                        <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                                            <DashboardIcon sx={{ fontSize: 60, color: 'error.main', mb: 2 }} />
+                                            <Typography variant="h5" gutterBottom>
+                                                Dashboard Administrateur
+                                            </Typography>
+                                            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                                                Gérez la plateforme et les utilisateurs
+                                            </Typography>
+                                            <Button
+                                                variant="contained"
+                                                size="large"
+                                                onClick={() => navigate('/admin')}
+                                                startIcon={<AdminIcon />}
+                                                color="error"
+                                                fullWidth
+                                            >
+                                                📊 Dashboard Administrateur
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+
+                                <Grid item xs={12} md={6}>
+                                    <Card elevation={3}>
+                                        <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                                            <PeopleIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                                            <Typography variant="h5" gutterBottom>
+                                                Gestion des Utilisateurs
+                                            </Typography>
+                                            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                                                Consultez et gérez tous les utilisateurs
+                                            </Typography>
+                                            <Button
+                                                variant="contained"
+                                                size="large"
+                                                onClick={() => navigate('/users')}
+                                                startIcon={<PeopleIcon />}
+                                                fullWidth
+                                            >
+                                                👥 Gérer les utilisateurs
+                                            </Button>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </>
+                        ) : (
+                            // UTILISATEUR STANDARD
+                            <Grid item xs={12} md={8} sx={{ mx: 'auto' }}>
+                                <Card elevation={3}>
+                                    <CardContent sx={{ textAlign: 'center', py: 4 }}>
+                                        <PeopleIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
+                                        <Typography variant="h5" gutterBottom>
+                                            Communauté
+                                        </Typography>
+                                        <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+                                            Découvrez les autres membres de la communauté
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            size="large"
+                                            onClick={() => navigate('/users')}
+                                            startIcon={<PeopleIcon />}
+                                            fullWidth
+                                        >
+                                            👥 Voir les utilisateurs
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        )}
+                    </Grid>
+
+                    {/* Informations du profil */}
+                    <Paper elevation={2} sx={{ p: 3, mt: 4, textAlign: 'center' }}>
+                        <Typography variant="h6" gutterBottom>
+                            👤 Votre Profil
+                        </Typography>
+                        <Typography variant="body1">
+                            <strong>Nom :</strong> {user?.firstName} {user?.lastName}
+                        </Typography>
+                        <Typography variant="body1">
+                            <strong>Email :</strong> {user?.email}
+                        </Typography>
+                        <Typography variant="body1">
+                            <strong>Rôle :</strong> {isAdmin() ? 'Administrateur' : 'Utilisateur'}
+                        </Typography>
+                    </Paper>
+                </Box>
+            )}
         </Container>
     );
 };

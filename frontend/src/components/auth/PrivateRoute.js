@@ -7,7 +7,7 @@ import { Box, CircularProgress, Typography } from '@mui/material';
  * Composant de route protégée pour l'authentification
  */
 const PrivateRoute = ({ children, adminOnly = false, requiredPermission = null }) => {
-    const { isAuthenticated, isLoading, user, hasPermission, isAdmin } = useAuth();
+    const { isAuthenticated, isLoading, hasPermission, isAdmin } = useAuth();
     const location = useLocation();
 
     // Affichage du loader pendant la vérification
@@ -22,6 +22,7 @@ const PrivateRoute = ({ children, adminOnly = false, requiredPermission = null }
                     minHeight: '100vh',
                     gap: 2
                 }}
+                data-testid="loading-state"
             >
                 <CircularProgress size={60} />
                 <Typography variant="h6" color="text.secondary">

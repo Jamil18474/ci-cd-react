@@ -1,6 +1,6 @@
 {
   "name": "ci-cd-react",
-  "version": "0.1.2",
+  "version": "0.1.8",
   "private": false,
   "homepage": "https://jamil18474.github.io/ci-cd-react/",
   "dependencies": {
@@ -9,11 +9,10 @@
     "@mui/icons-material": "^7.3.1",
     "@mui/material": "^7.3.1",
     "@testing-library/react": "^16.0.1",
-    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^7.7.1",
+    "react-router-dom": "^6.30.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
     "web-vitals": "^2.1.4"
@@ -21,8 +20,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "build-npm": "cross-env NODE_ENV=production && rimraf dist && mkdir dist && npx babel frontend/src --out-dir dist --copy-files",
+    "build-npm": "cross-env NODE_ENV=production && rimraf dist && mkdir dist && npx babel src --out-dir dist --copy-files",
     "test": "react-scripts test --coverage --watchAll=false",
+    "test:watch": "react-scripts test",
+    "test:integration": "react-scripts test --testPathPattern=integration --coverage --watchAll=false",
+    "test:unit": "react-scripts test --testPathPattern=unit --coverage --watchAll=false",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
@@ -52,6 +54,7 @@
     "@babel/plugin-transform-react-jsx": "^7.25.9",
     "@babel/preset-env": "^7.25.8",
     "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/user-event": "^14.6.1",
     "babel-jest": "^29.7.0",
     "cross-env": "^7.0.3",
     "gh-pages": "^6.2.0",

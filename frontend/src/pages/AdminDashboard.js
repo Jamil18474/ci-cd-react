@@ -13,7 +13,8 @@ import {
 import {
     ExitToApp as LogoutIcon,
     People as PeopleIcon,
-    AdminPanelSettings as AdminIcon
+    AdminPanelSettings as AdminIcon,
+    Refresh as RefreshIcon
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { userService } from '../services/api';
@@ -42,18 +43,23 @@ const AdminDashboard = () => {
         try {
             const response = await userService.getAllUsers();
             const usersData = response.users || response;
-            setUsers(usersData);
+            setUsers(Array.isArray(usersData) ? usersData : []);
         } catch (error) {
             let errorMessage = 'Erreur lors du chargement des statistiques';
             if (error.status === 403) {
                 errorMessage = 'Vous n\'avez pas les droits pour voir les statistiques';
             } else if (error.status === 401) {
                 errorMessage = 'Session expirée, veuillez vous reconnecter';
+            } else if (error.status === 500) {
+                errorMessage = 'Erreur serveur';
+            } else if (error.status === 0) {
+                errorMessage = 'Impossible de contacter le serveur';
             } else if (error.message) {
                 errorMessage = error.message;
             }
 
             setError(errorMessage);
+            setUsers([]);
             toast.error(errorMessage);
         } finally {
             setLoading(false);
@@ -118,7 +124,20 @@ const AdminDashboard = () => {
 
             {/* Gestion des erreurs */}
             {error && (
-                <Alert severity="error" sx={{ mb: 3 }}>
+                <Alert
+                    severity="error"
+                    sx={{ mb: 3 }}
+                    action={
+                        <Button
+                            color="inherit"
+                            size="small"
+                            startIcon={<RefreshIcon />}
+                            onClick={loadUsers}
+                        >
+                            Réessayer
+                        </Button>
+                    }
+                >
                     {error}
                 </Alert>
             )}
@@ -189,12 +208,20 @@ const AdminDashboard = () => {
                             Gérer les utilisateurs
                         </Button>
 
-
+                        {error && (
+                            <Button
+                                variant="outlined"
+                                size="large"
+                                onClick={loadUsers}
+                                startIcon={<RefreshIcon />}
+                                sx={{ minWidth: 200 }}
+                            >
+                                Actualiser les données
+                            </Button>
+                        )}
                     </Box>
                 </CardContent>
             </Card>
-
-
         </Container>
     );
 };

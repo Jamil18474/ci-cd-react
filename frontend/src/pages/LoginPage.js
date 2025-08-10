@@ -50,7 +50,6 @@ const LoginPage = () => {
                     </Alert>
                 )}
 
-                {/* UTILISER VOTRE LoginForm existant */}
                 <LoginForm />
 
                 <Divider sx={{ my: 3 }} />

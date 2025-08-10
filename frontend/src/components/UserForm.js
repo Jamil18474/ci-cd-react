@@ -193,12 +193,16 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
             let errorMessage = 'Erreur lors de l\'inscription';
 
             if (error.status === 400) {
-                if (error.message.includes('email')) {
+                if (error.message && error.message.includes('email')) {
                     errorMessage = 'Cette adresse email est déjà utilisée';
                     setErrors(prev => ({ ...prev, email: errorMessage }));
                 } else {
                     errorMessage = error.message;
                 }
+            } else if (error.status === 500) {
+                errorMessage = 'Erreur serveur';
+            } else if (error.status === 0) {
+                errorMessage = 'Impossible de contacter le serveur';
             } else if (error.message) {
                 errorMessage = error.message;
             }
@@ -237,7 +241,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                 <Box component="form" onSubmit={handleSubmit} noValidate>
                     <Grid container spacing={3}>
                         {/* Prénom */}
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Prénom"
@@ -253,7 +257,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                         </Grid>
 
                         {/* Nom */}
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Nom"
@@ -269,7 +273,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                         </Grid>
 
                         {/* Email */}
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <TextField
                                 fullWidth
                                 label="Email"
@@ -286,7 +290,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                         </Grid>
 
                         {/* NOUVEAU: Mot de passe */}
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <TextField
                                 fullWidth
                                 label="Mot de passe"
@@ -316,7 +320,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                         </Grid>
 
                         {/* Date de naissance */}
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Date de naissance"
@@ -334,7 +338,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                         </Grid>
 
                         {/* Code postal */}
-                        <Grid item xs={12} sm={6}>
+                        <Grid size={{ xs: 12, sm: 6 }}>
                             <TextField
                                 fullWidth
                                 label="Code postal"
@@ -350,7 +354,7 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                         </Grid>
 
                         {/* Ville */}
-                        <Grid item xs={12}>
+                        <Grid size={12}>
                             <TextField
                                 fullWidth
                                 label="Ville"
@@ -382,8 +386,6 @@ const UserForm = ({ onRegister, loading: externalLoading = false }) => {
                             {isLoading ? 'Inscription en cours...' : 'S\'inscrire'}
                         </Button>
                     </Box>
-
-
                 </Box>
             </CardContent>
         </Card>

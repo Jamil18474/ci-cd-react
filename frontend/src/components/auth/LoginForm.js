@@ -60,9 +60,11 @@ const LoginForm = () => {
     const validateField = (fieldName, value) => {
         switch (fieldName) {
             case 'email':
+                if (!value.trim()) return 'Email requis';
                 if (!isEmailValid(value)) return 'Email invalide';
                 return '';
             case 'password':
+                if (!value.trim()) return 'Mot de passe requis';
                 if (!isPasswordValid(value)) return 'Mot de passe invalide';
                 return '';
             default:
@@ -146,6 +148,7 @@ const LoginForm = () => {
                 required
                 autoComplete="email"
                 autoFocus
+                data-testid="email-input"
             />
 
             <TextField
@@ -160,6 +163,7 @@ const LoginForm = () => {
                 margin="normal"
                 required
                 autoComplete="current-password"
+                data-testid="password-input"
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
@@ -167,6 +171,7 @@ const LoginForm = () => {
                                 aria-label="basculer la visibilité du mot de passe"
                                 onClick={togglePasswordVisibility}
                                 edge="end"
+                                data-testid="password-toggle"
                             >
                                 {showPassword ? <VisibilityOff /> : <Visibility />}
                             </IconButton>
@@ -182,11 +187,10 @@ const LoginForm = () => {
                 disabled={!isFormValid() || isSubmitting}
                 startIcon={<LoginIcon />}
                 sx={{ mt: 3, mb: 2 }}
+                data-testid="submit-button"
             >
                 {isSubmitting ? 'Connexion en cours...' : 'Se connecter'}
             </Button>
-
-
         </Box>
     );
 };

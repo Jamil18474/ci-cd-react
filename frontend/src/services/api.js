@@ -5,7 +5,6 @@
 
 // Configuration de base
 const API_BASE_URL = process.env.REACT_APP_API_URL;
-const API_TIMEOUT = 10000; // 10 secondes
 
 /**
  * Classe de gestion des erreurs API
@@ -15,7 +14,9 @@ class ApiError extends Error {
         super(message);
         this.name = 'ApiError';
         this.status = status;
-        this.data = data;
+        if (data !== undefined) {
+            this.data = data;
+        }
     }
 }
 
@@ -48,8 +49,7 @@ const apiRequest = async (endpoint, options = {}) => {
     const defaultOptions = {
         headers: {
             'Content-Type': 'application/json',
-        },
-        timeout: API_TIMEOUT,
+        }
     };
 
     // Ajouter le token d'authentification si disponible
@@ -60,15 +60,7 @@ const apiRequest = async (endpoint, options = {}) => {
     const config = { ...defaultOptions, ...options };
 
     try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), config.timeout);
-
-        const response = await fetch(url, {
-            ...config,
-            signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
+        const response = await fetch(url, config);
 
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({}));
@@ -82,12 +74,13 @@ const apiRequest = async (endpoint, options = {}) => {
         return await response.json();
 
     } catch (error) {
-        if (error.name === 'AbortError') {
-            throw new ApiError('Timeout de la requête', 408);
-        }
-
         if (error instanceof ApiError) {
             throw error;
+        }
+
+        // Gestion des erreurs réseau
+        if (error.message === 'Failed to fetch' || (error.message && error.message.includes('fetch'))) {
+            throw new ApiError('Erreur réseau - impossible de contacter le serveur', 0, { originalError: error });
         }
 
         throw new ApiError(
@@ -106,7 +99,9 @@ export const authService = {
      * Connexion utilisateur - APPEL API RÉEL
      */
     login: async (credentials) => {
-
+        if (!credentials.email || !credentials.password) {
+            throw new ApiError('Email et mot de passe requis', 400);
+        }
 
         const response = await apiRequest('/api/auth/login', {
             method: 'POST',
@@ -125,6 +120,9 @@ export const authService = {
      * Inscription utilisateur - APPEL API RÉEL
      */
     register: async (userData) => {
+        if (!userData.email || !userData.password) {
+            throw new ApiError('Email et mot de passe requis', 400);
+        }
 
         return await apiRequest('/api/auth/register', {
             method: 'POST',
@@ -140,25 +138,15 @@ export const authService = {
             await apiRequest('/api/auth/logout', {
                 method: 'POST',
             });
+        } catch (error) {
+            // Ne pas lancer l'erreur pour la déconnexion
+            console.warn('Erreur lors de la déconnexion API:', error);
         } finally {
             // Toujours supprimer le token local
             clearAuthToken();
         }
     },
 
-    /**
-     * Récupérer l'utilisateur actuel
-     */
-    getCurrentUser: async () => {
-        return await apiRequest('/api/auth/me');
-    },
-
-    /**
-     * Vérifier si le backend est accessible
-     */
-    healthCheck: async () => {
-        return await apiRequest('/');
-    },
 };
 
 /**
@@ -178,16 +166,13 @@ export const userService = {
      * Supprimer un utilisateur
      */
     deleteUser: async (userId) => {
+        if (!userId) {
+            throw new ApiError('ID utilisateur requis', 400);
+        }
+
         return await apiRequest(`/api/users/${userId}`, {
             method: 'DELETE',
         });
-    },
-
-    /**
-     * Récupérer un utilisateur par ID
-     */
-    getUserById: async (userId) => {
-        return await apiRequest(`/api/users/${userId}`);
     },
 };
 
