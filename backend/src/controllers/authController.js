@@ -1,6 +1,13 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const {
+  isEmailValid,
+  isPasswordValid,
+  isNameValid,
+  isPostalCodeValid,
+  isAgeValidFromBirthDate
+} = require('../utils/validators');
 
 /**
  * Register new user
@@ -9,31 +16,55 @@ const register = async (req, res) => {
   try {
     const { firstName, lastName, email, password, birthDate, city, postalCode } = req.body;
 
-    if (!firstName || !lastName || !email || !password) {
-      return res.status(400).json({ message: 'Tous les champs sont requis.' });
+    // --- VALIDATION ---
+    let errors = {};
+
+    if (!firstName || !isNameValid(firstName)) {
+      errors.firstName = "Prénom invalide (lettres, espaces, tirets, apostrophes uniquement)";
+    }
+    if (!lastName || !isNameValid(lastName)) {
+      errors.lastName = "Nom invalide (lettres, espaces, tirets, apostrophes uniquement)";
+    }
+    if (!email || !isEmailValid(email)) {
+      errors.email = "Email invalide";
+    }
+    if (!password || !isPasswordValid(password)) {
+      errors.password = "Mot de passe invalide (6 caractères minimum)";
+    }
+    if (!birthDate || !isAgeValidFromBirthDate(birthDate)) {
+      errors.birthDate = "Vous devez avoir au moins 18 ans";
+    }
+    if (!city || !isNameValid(city)) {
+      errors.city = "Ville invalide (lettres, espaces, tirets, apostrophes uniquement)";
+    }
+    if (!postalCode || !isPostalCodeValid(postalCode)) {
+      errors.postalCode = "Code postal invalide (format français attendu)";
     }
 
-    const existingUser = await User.findOne({ email });
+    if (Object.keys(errors).length > 0) {
+      return res.status(400).json({ message: "Validation échouée", errors });
+    }
+    // --- FIN VALIDATION ---
+
+    const existingUser = await User.findOne({ email: email.trim().toLowerCase() });
 
     if (existingUser) {
       return res.status(400).json({ message: 'Cette adresse email est déjà utilisée.' });
     }
 
     const userData = {
-      firstName,
-      lastName,
-      email: email.trim().toLowerCase(), // ✅ Normaliser l'email
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim().toLowerCase(),
       password,
       birthDate: new Date(birthDate),
-      city,
-      postalCode,
+      city: city.trim(),
+      postalCode: postalCode.trim(),
       role: 'user'
     };
 
     const user = new User(userData);
     const savedUser = await user.save();
-
-
 
     res.status(201).json({
       message: 'Votre compte a été créé avec succès !',
@@ -71,13 +102,13 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect.' });
     }
 
-    // ✅ CRÉATION TOKEN avec durée explicite
+    // CRÉATION TOKEN avec durée explicite
     const tokenPayload = {
       userId: user._id,
       email: user.email,
       role: user.role,
       permissions: user.permissions,
-      firstName: user.firstName, // ✅ Ajouter pour éviter les requêtes supplémentaires
+      firstName: user.firstName,
       lastName: user.lastName
     };
 
@@ -89,17 +120,13 @@ const login = async (req, res) => {
 
     const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, jwtOptions);
 
-    // ✅ VÉRIFICATION DE LA DURÉE DU TOKEN
     const decoded = jwt.decode(token);
     const expiresAt = new Date(decoded.exp * 1000);
-
-
-
 
     res.json({
       message: 'Connexion réussie !',
       token,
-      expiresAt: expiresAt.toISOString(), // ✅ Informer le frontend de l'expiration
+      expiresAt: expiresAt.toISOString(),
       user: {
         id: user._id,
         firstName: user.firstName,
@@ -119,11 +146,10 @@ const login = async (req, res) => {
 };
 
 /**
- * ✅ NOUVEAU : Logout endpoint
+ * Logout endpoint
  */
 const logout = (req, res) => {
   try {
-
     res.json({
       message: 'Déconnexion réussie',
       timestamp: new Date().toISOString()
