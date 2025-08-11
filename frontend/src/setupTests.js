@@ -66,4 +66,4 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Mock process.env.REACT_APP_API_URL
-process.env.REACT_APP_API_URL = 'http://localhost:8000';
+process.env.REACT_APP_API_URL = 'https://ci-cd-back-dbsx.onrender.com';

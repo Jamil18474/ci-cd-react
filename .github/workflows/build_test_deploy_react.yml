@@ -1,14 +1,17 @@
 # Documentation for GitHub Actions Workflow: Build, Test and Deploy React Application
 
 # Workflow Name: Build, Test and Deploy React Application
+name: Build, Test and Deploy React Application
 
 # Controls when the action will run.
 on:
   # This triggers the workflow on push or pull request events, but only for the 'master' branch.
   push:
-    branches: [ master, develop ]
+    branches: [ master ]
   pull_request:
-    branches: [ master, develop ]
+    branches: [ master ]
+  repository_dispatch:
+    types: [ dispatch-event ]
 
 permissions: write-all
 
@@ -51,7 +54,8 @@ jobs:
           
           # Run unit tests
           npm test
-
+        env:
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
       # 5. Set the Git remote URL to use an access token for authentication.
       - name: Authenticate with npm
         working-directory: ./frontend

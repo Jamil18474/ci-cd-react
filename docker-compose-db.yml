@@ -1,44 +1,5 @@
 # Docker Compose for User Management Application
 services:
-  mongodb:
-    build:
-      context: ./database
-      dockerfile: docker/Dockerfile
-    container_name: user_management_db
-    environment:
-      # ✅ Variables MongoDB depuis .env
-      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
-      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE}
-
-      # Variables admin (optionnel)
-      ADMIN_EMAIL: ${ADMIN_EMAIL}
-      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH}
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
-    networks:
-      - app-network
-
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: user_management_backend
-    ports:
-      - "8000:8000"
-    depends_on:
-      - mongodb
-    networks:
-      - app-network
-    environment:
-      # ✅ URI MongoDB construite avec variables
-      - MONGODB_URI=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017/${MONGO_INITDB_DATABASE}?authSource=admin
-      - JWT_SECRET=${JWT_SECRET}
-      - PORT=${PORT}
-      - NODE_ENV=${NODE_ENV}
-      - FRONTEND_URL=${FRONTEND_URL}
 
   frontend:
     build:
