@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {fireEvent, render, screen} from '@testing-library/react';
 import '@testing-library/jest-dom';
 // MAINTENANT importer App
 import App from './App';
@@ -131,5 +131,22 @@ describe('App Component - Focus sur couverture', () => {
         render(<App />);
         // Ici le coverage couvrira la branche "/ci-cd-react"
         process.env.NODE_ENV = originalEnv;
+    });
+    test('should focus and blur skip link for accessibility (couvre onFocus/onBlur)', () => {
+        render(<App />);
+        // Sélectionne le skip link par son texte
+        const skipLink = screen.getByText(/Aller au contenu principal/i);
+
+        // Focus (doit déclencher onFocus et changer le style)
+        fireEvent.focus(skipLink);
+        expect(skipLink.style.left).toBe('16px');
+        expect(skipLink.style.width).toBe('auto');
+        expect(skipLink.style.height).toBe('auto');
+
+        // Blur (doit déclencher onBlur et remettre le style caché)
+        fireEvent.blur(skipLink);
+        expect(skipLink.style.left).toBe('-999px');
+        expect(skipLink.style.width).toBe('1px');
+        expect(skipLink.style.height).toBe('1px');
     });
 });
