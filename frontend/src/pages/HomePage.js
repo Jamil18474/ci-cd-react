@@ -16,17 +16,30 @@ import {
     PersonAdd as RegisterIcon,
     Dashboard as DashboardIcon,
     People as PeopleIcon,
-    AdminPanelSettings as AdminIcon
+    AdminPanelSettings as AdminIcon,
+    ExitToApp as LogoutIcon
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 /**
  * Page d'accueil principale
  */
 const HomePage = () => {
-    const { isAuthenticated, user, isAdmin } = useAuth();
+    const { isAuthenticated, user, isAdmin, logout } = useAuth();
     const navigate = useNavigate();
+
+    // Handler de déconnexion
+    const handleLogout = async () => {
+        try {
+            await logout();
+            toast.success('Déconnexion réussie');
+            navigate('/');
+        } catch (error) {
+            toast.error('Erreur lors de la déconnexion');
+        }
+    };
 
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -40,6 +53,20 @@ const HomePage = () => {
                     Gestion moderne et sécurisée des comptes utilisateurs
                 </Typography>
             </Box>
+
+            {/* Bouton de déconnexion affiché en haut à droite quand connecté */}
+            {isAuthenticated && (
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+                    <Button
+                        variant="outlined"
+                        color="error"
+                        startIcon={<LogoutIcon />}
+                        onClick={handleLogout}
+                    >
+                        Déconnexion
+                    </Button>
+                </Box>
+            )}
 
             {/* Contenu principal selon l'état d'authentification */}
             {!isAuthenticated ? (

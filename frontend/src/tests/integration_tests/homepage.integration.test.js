@@ -5,9 +5,16 @@ import { BrowserRouter } from 'react-router-dom';
 import HomePage from '../../pages/HomePage';
 import { useAuth } from '../../contexts/AuthContext';
 import '@testing-library/jest-dom';
+import { toast } from 'react-toastify';
 
 // Mock des dépendances
 jest.mock('../../contexts/AuthContext');
+
+// Mock toastify pour tester les toasts de succès/erreur
+jest.mock('react-toastify', () => ({
+    ...jest.requireActual('react-toastify'),
+    toast: { success: jest.fn(), error: jest.fn() }
+}));
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
@@ -28,6 +35,8 @@ const HomePageWrapper = ({ authState }) => {
 describe('HomePage Integration Tests', () => {
     beforeEach(() => {
         mockNavigate.mockClear();
+        toast.success.mockClear();
+        toast.error.mockClear();
     });
 
     /**
@@ -238,5 +247,42 @@ describe('HomePage Integration Tests', () => {
         render(<HomePageWrapper authState={authState} />);
 
         expect(isAdminMock).toHaveBeenCalled();
+    });
+
+    /**
+     * Test : déconnexion (succès)
+     */
+    test('should logout and navigate to / when clicking logout (success)', async () => {
+        const user = userEvent.setup();
+        const logoutMock = jest.fn().mockResolvedValue();
+        const authState = {
+            isAuthenticated: true,
+            user: { firstName: 'Jean', lastName: 'Dupont', email: 'jean@test.com', role: 'user' },
+            isAdmin: jest.fn().mockReturnValue(false),
+            logout: logoutMock
+        };
+        render(<HomePageWrapper authState={authState} />);
+        await user.click(screen.getByText('Déconnexion'));
+        expect(logoutMock).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith('Déconnexion réussie');
+        expect(mockNavigate).toHaveBeenCalledWith('/');
+    });
+
+    /**
+     * Test : déconnexion (échec)
+     */
+    test('should show error toast if logout fails', async () => {
+        const user = userEvent.setup();
+        const logoutMock = jest.fn().mockRejectedValue(new Error('fail'));
+        const authState = {
+            isAuthenticated: true,
+            user: { firstName: 'Jean', lastName: 'Dupont', email: 'jean@test.com', role: 'user' },
+            isAdmin: jest.fn().mockReturnValue(false),
+            logout: logoutMock
+        };
+        render(<HomePageWrapper authState={authState} />);
+        await user.click(screen.getByText('Déconnexion'));
+        expect(logoutMock).toHaveBeenCalled();
+        expect(toast.error).toHaveBeenCalledWith('Erreur lors de la déconnexion');
     });
 });
