@@ -49,7 +49,7 @@ const HomePage = () => {
                 <Typography variant="h2" component="h1" gutterBottom color="primary">
                     🌟 Plateforme Utilisateurs
                 </Typography>
-                <Typography variant="h5" color="text.secondary" sx={{ mb: 4 }}>
+                <Typography variant="h4" component="h2" color="text.secondary" sx={{ mb: 4 }}>
                     Gestion moderne et sécurisée des comptes utilisateurs
                 </Typography>
             </Box>
@@ -78,7 +78,7 @@ const HomePage = () => {
                             <Card elevation={3} sx={{ height: '100%' }}>
                                 <CardContent sx={{ textAlign: 'center', py: 4 }}>
                                     <LoginIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                                    <Typography variant="h5" gutterBottom>
+                                    <Typography variant="h5" component="h3" gutterBottom>
                                         Se connecter
                                     </Typography>
                                     <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
@@ -101,7 +101,7 @@ const HomePage = () => {
                             <Card elevation={3} sx={{ height: '100%' }}>
                                 <CardContent sx={{ textAlign: 'center', py: 4 }}>
                                     <RegisterIcon sx={{ fontSize: 60, color: 'secondary.main', mb: 2 }} />
-                                    <Typography variant="h5" gutterBottom>
+                                    <Typography variant="h5" component="h3" gutterBottom>
                                         S'inscrire
                                     </Typography>
                                     <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
@@ -124,12 +124,12 @@ const HomePage = () => {
 
                     {/* Fonctionnalités */}
                     <Paper elevation={2} sx={{ p: 4, textAlign: 'center' }}>
-                        <Typography variant="h4" gutterBottom>
+                        <Typography variant="h4" component="h2" gutterBottom>
                             ✨ Fonctionnalités
                         </Typography>
                         <Grid container spacing={3} sx={{ mt: 2 }}>
                             <Grid item xs={12} sm={4}>
-                                <Typography variant="h6" gutterBottom>
+                                <Typography variant="h6" component="h3" gutterBottom>
                                     🔒 Sécurisé
                                 </Typography>
                                 <Typography variant="body2">
@@ -137,7 +137,7 @@ const HomePage = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography variant="h6" gutterBottom>
+                                <Typography variant="h6" component="h3" gutterBottom>
                                     👥 Communauté
                                 </Typography>
                                 <Typography variant="body2">
@@ -145,7 +145,7 @@ const HomePage = () => {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12} sm={4}>
-                                <Typography variant="h6" gutterBottom>
+                                <Typography variant="h6" component="h3" gutterBottom>
                                     ⚡ Moderne
                                 </Typography>
                                 <Typography variant="body2">
@@ -174,7 +174,7 @@ const HomePage = () => {
                                     <Card elevation={3}>
                                         <CardContent sx={{ textAlign: 'center', py: 4 }}>
                                             <DashboardIcon sx={{ fontSize: 60, color: 'error.main', mb: 2 }} />
-                                            <Typography variant="h5" gutterBottom>
+                                            <Typography variant="h5" component="h3" gutterBottom>
                                                 Dashboard Administrateur
                                             </Typography>
                                             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
@@ -198,7 +198,7 @@ const HomePage = () => {
                                     <Card elevation={3}>
                                         <CardContent sx={{ textAlign: 'center', py: 4 }}>
                                             <PeopleIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                                            <Typography variant="h5" gutterBottom>
+                                            <Typography variant="h5" component="h3" gutterBottom>
                                                 Gestion des Utilisateurs
                                             </Typography>
                                             <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
@@ -223,7 +223,7 @@ const HomePage = () => {
                                 <Card elevation={3}>
                                     <CardContent sx={{ textAlign: 'center', py: 4 }}>
                                         <PeopleIcon sx={{ fontSize: 60, color: 'primary.main', mb: 2 }} />
-                                        <Typography variant="h5" gutterBottom>
+                                        <Typography variant="h5" component="h3" gutterBottom>
                                             Communauté
                                         </Typography>
                                         <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>

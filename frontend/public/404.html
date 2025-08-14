@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="refresh" content="0;URL=/ci-cd-react/" />
+  <script>
+    // Redirection JS pour conserver le chemin original lors d'un accès direct
+    var l = window.location;
+    var pathname = l.pathname.replace('/ci-cd-react', ''); 
+    window.location.replace('/ci-cd-react/?redirect=' + encodeURIComponent(pathname + l.search + l.hash));
+  </script>
+  <title>Redirecting...</title>
+</head>
+<body>
+<p>Redirecting...</p>
+</body>
+</html>
