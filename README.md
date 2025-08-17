@@ -1,15 +1,15 @@
 # React User Registration App
 
-A simple React application that allows users to register by filling out a form with their personal details. The
-application validates the information before storing it in the `localStorage`, and displays a list of registered users.
-The app also includes test coverage and uses GitHub Actions for CI/CD.
+A simple React application that allows users to register by filling out a form with their personal details. The application validates the information, and displays a list of registered users. The app also includes test coverage and uses GitHub Actions for CI/CD.
 
 ---
 
 ## Summary
 
+- [Production URLs](#production-urls)
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
+- [Environment Variables (.env.template)](#environment-variables-envtemplate)
 - [Available Scripts](#available-scripts)
 - [Running Tests](#running-tests)
 - [Generate API Documentation](#generate-api-documentation)
@@ -17,6 +17,14 @@ The app also includes test coverage and uses GitHub Actions for CI/CD.
 - [Deployment](#deployment)
 - [NPM Package Build and Publish](#npm-package-build-and-publish)
 - [Technologies Used](#technologies-used)
+- [Usage with Docker (Fullstack)](#usage-with-docker-fullstack)
+
+---
+
+## Production URLs
+
+- **Production Frontend**: [https://jamil18474.github.io](https://jamil18474.github.io)
+- **Production Backend API**: [https://ci-cd-back-dbsx.onrender.com](https://ci-cd-back-dbsx.onrender.com)
 
 ---
 
@@ -26,12 +34,15 @@ Before you can run this project, make sure you have the following installed:
 
 - **Node.js** (version 14.x or above)
 - **npm** (Node Package Manager)
+- **Docker** and **Docker Compose** (if you want to run the fullstack locally)
 
 You can check if these are installed by running:
 
 ```bash
 node -v
 npm -v
+docker --version
+docker-compose --version
 ```
 
 ---
@@ -43,8 +54,8 @@ npm -v
 Clone the project to your local machine:
 
 ```bash
-git clone https://github.com/yourusername/react-user-registration.git
-cd react-user-registration
+git clone https://github.com/Jamil18474/ci-cd-react.git
+cd ci-cd-react
 ```
 
 2. Install Dependencies
@@ -54,6 +65,23 @@ Run the following command to install the required dependencies:
 ```bash
 npm install
 ```
+
+---
+
+## Environment Variables (.env.template)
+
+All configuration for the frontend (API endpoints, etc.) is managed through the `.env.template` file at the project root.
+
+**Instructions:**
+1. Copy `.env.template` to `.env`:
+    ```bash
+    cp .env.template .env
+    ```
+2. Edit `.env` to set your backend API URL (`REACT_APP_API_URL`).
+   - For production: `REACT_APP_API_URL=https://ci-cd-back-dbsx.onrender.com`
+   - For development: `REACT_APP_API_URL=http://localhost:8000`
+
+**Do not add sensitive information to this file.**
 
 ---
 
@@ -104,8 +132,7 @@ This will start Jest in watch mode, running all the tests defined in your projec
 
 2. Check Test Coverage
 
-Codecov integration is set up to track test coverage. After running the tests, the coverage report will be uploaded
-automatically to Codecov. You can view the coverage details on the Codecov website.
+Codecov integration is set up to track test coverage. After running the tests, the coverage report will be uploaded automatically to Codecov. You can view the coverage details on the Codecov website.
 
 ---
 
@@ -123,43 +150,43 @@ This will create a docs folder containing the generated documentation based on t
 
 ## GitHub Actions CI/CD
 
-This project is configured with GitHub Actions for continuous integration and deployment (CI/CD). The following steps
-are automated:
+This project is configured with GitHub Actions for continuous integration and deployment (CI/CD). The following steps are automated:
 
-    Build and Test: Tests are automatically run, and code coverage is reported to Codecov.
-    Deployment: The app is automatically deployed to GitHub Pages when code is pushed to the master branch.
+- Build and Test: Tests are automatically run, and code coverage is reported to Codecov.
+- Deployment: The app is automatically deployed to GitHub Pages when code is pushed to the master branch.
 
 ---
 
 ## Deployment
 
-The app is deployed to GitHub Pages using GitHub Actions. To deploy, simply push to the master branch, and the app will
-be built and deployed automatically.
+The app is deployed to GitHub Pages using GitHub Actions. To deploy, simply push to the master branch, and the app will be built and deployed automatically.
 
 ---
 
 ## NPM Package Build and Publish
 
-This project includes automation for building, versioning, and publishing the NPM package to the NPM registry. Below are
-the key steps involved:
+This project includes automation for building, versioning, and publishing the NPM package to the NPM registry. Below are the key steps involved:
 
-    Configure Git: Git user settings are configured to automatically commit with the correct user information:
-
+Configure Git: Git user settings are configured to automatically commit with the correct user information:
+```bash
 git config --global user.email "jamil.abdelhamid@ynov.com"
 git config --global user.name "Jamil18474"
+```
 
-Build the NPM Package: The NPM package is built using the following command, which compiles the necessary files for
-publishing:
-
+Build the NPM Package: The NPM package is built using the following command, which compiles the necessary files for publishing:
+```bash
 npm run build-npm
+```
 
 Versioning: The version of the package is bumped (using the patch version increment):
-
+```bash
 npm version patch
+```
 
 Publish: After building and versioning, the package is automatically published to the NPM registry:
-
+```bash
 npm publish
+```
 
 NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_TOKEN) is used for secure publishing.
 
@@ -167,29 +194,55 @@ NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_
 
 ## Technologies Used
 
-    React: JavaScript library for building the user interface.
-    Material-UI: React components that implement Google's Material Design.
-    Jest: Testing framework for React.
-    Codecov: Code coverage tool integrated with the GitHub repository.
-    JSDoc: Tool for generating API documentation from comments in the code.
-    GitHub Actions: CI/CD pipeline for automatic testing, building, and deployment.
-    npm: Package manager used to install dependencies and automate build tasks.
+- React: JavaScript library for building the user interface.
+- Material-UI: React components that implement Google's Material Design.
+- Jest: Testing framework for React.
+- Codecov: Code coverage tool integrated with the GitHub repository.
+- JSDoc: Tool for generating API documentation from comments in the code.
+- GitHub Actions: CI/CD pipeline for automatic testing, building, and deployment.
+- npm: Package manager used to install dependencies and automate build tasks.
 
 ---
 
-### Explanation of Sections:
+## Usage with Docker (Fullstack)
 
-- **Prerequisites**: List of tools required to run the project (Node.js and npm).
+You can run the **frontend, backend, and MongoDB database** locally using Docker Compose.
+
+### 1. Prerequisites
+
+- Docker and Docker Compose installed
+- `.env` files correctly configured for both frontend and backend
+
+### 2. Start the stack
+
+From the root folder (where your `docker-compose.yml` is), run:
+
+```bash
+docker-compose up --build
+```
+
+This will start:
+- the frontend app on [http://localhost:3000](http://localhost:3000)
+- the backend API on [http://localhost:8000](http://localhost:8000)
+- the MongoDB database on port 27017
+
+You can now use the application locally, with all services running in Docker containers.
+
+---
+
+### Explanation of Sections
+
+- **Production URLs**: Direct links to production deployments of the frontend and backend.
+- **Prerequisites**: List of tools required to run the project (Node.js, npm, Docker).
 - **Getting Started**: Instructions to clone the project and install dependencies.
-- **Available Scripts**: Basic commands to run the application (`npm run start`), launch tests (`npm run test`), and
-  create a production build (`npm run build`).
+- **Environment Variables**: How to configure environment for local/prod.
+- **Available Scripts**: Basic commands to run the application and build.
 - **Running Tests**: Instructions for running unit tests and checking code coverage reports via Codecov.
 - **Generate API Documentation**: Instructions for generating API documentation using JSDoc.
-- **GitHub Actions CI/CD**: Explanation of the CI/CD process configured with GitHub Actions to automate the build,
-  tests, and deployment to GitHub Pages.
+- **GitHub Actions CI/CD**: Explanation of the CI/CD process configured with GitHub Actions to automate the build, tests, and deployment to GitHub Pages.
 - **Deployment**: Process of automatic deployment via GitHub Actions to GitHub Pages.
-- **Technologies Used**: List of the main technologies used in the project.
 - **NPM Package Build** and Publish: Steps for automating the NPM package build, versioning, and publishing process.
+- **Technologies Used**: List of the main technologies used in the project.
+- **Usage with Docker (Fullstack)**: How to run the entire stack (frontend + backend + MongoDB) with Docker Compose for local development.
 
-This `README.md` file contains all the necessary information to get started, test, and deploy your project with detailed
-instructions.
+This `README.md` file contains all the necessary information to get started, test, and deploy your project with detailed instructions.
