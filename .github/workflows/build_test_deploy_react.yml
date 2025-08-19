@@ -30,8 +30,8 @@ jobs:
     # Steps define the sequence of tasks that will be executed as part of the job.
     steps:
       # 1. Checkout the repository to the runner's workspace.
-      - uses: actions/checkout@v4
-        name: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       # 2. Set up Node.js with the specified version from the matrix (Node.js 20.x).
       - name: Use Node.js ${{ matrix.node-version }}
@@ -41,7 +41,6 @@ jobs:
 
       # 3. Install dependencies, generate documentation with JSDoc, build the app, and run tests.
       - name: Install dependencies, build, docs and test
-        working-directory: ./frontend
         run: |
           # Install dependencies via npm ci (clean install)
           npm ci
@@ -55,15 +54,14 @@ jobs:
           # Run unit tests
           npm test
         env:
-          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+          API_URL: ${{ secrets.API_URL }}
+
       # 5. Set the Git remote URL to use an access token for authentication.
       - name: Authenticate with npm
-        working-directory: ./frontend
         run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
       # 6. Step to increment the version in the package.json file
       - name: Increment version
-        working-directory: ./frontend
         run: |
           node -e "
             const fs = require('fs');
@@ -77,7 +75,6 @@ jobs:
 
       # 7. Step to commit the changes in the package.json file
       - name: Commit version change
-        working-directory: ./frontend
         run: |
           # Configure the email and username for Git
           # This information will be used for the commit
@@ -100,7 +97,6 @@ jobs:
 
       # 8. Configure git, build, version, and publish the package on NPM.
       - name: Build and publish package on NPM 📦
-        working-directory: ./frontend
         run: |
           # Configure Git with user information
           git config --global user.email "jamil.abdelhamid@ynov.com"
@@ -128,7 +124,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload the entire 'build' directory for deployment.
-          path: frontend/build
+          path: build
           if-no-files-found: error
 
       # 11. Upload coverage reports to Codecov for coverage tracking.

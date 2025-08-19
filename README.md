@@ -17,7 +17,7 @@ A simple React application that allows users to register by filling out a form w
 - [Deployment](#deployment)
 - [NPM Package Build and Publish](#npm-package-build-and-publish)
 - [Technologies Used](#technologies-used)
-- [Usage with Docker (Fullstack)](#usage-with-docker-fullstack)
+- [Usage with Docker](#usage-with-docker)
 
 ---
 
@@ -32,9 +32,9 @@ A simple React application that allows users to register by filling out a form w
 
 Before you can run this project, make sure you have the following installed:
 
-- **Node.js** (version 14.x or above)
+- **Node.js**
 - **npm** (Node Package Manager)
-- **Docker** and **Docker Compose** (if you want to run the fullstack locally)
+- **Docker** and **Docker Compose**
 
 You can check if these are installed by running:
 
@@ -49,7 +49,7 @@ docker-compose --version
 
 ## Getting Started
 
-1. Clone the Repository
+1. **Clone the Repository**
 
 Clone the project to your local machine:
 
@@ -58,30 +58,25 @@ git clone https://github.com/Jamil18474/ci-cd-react.git
 cd ci-cd-react
 ```
 
-2. Install Dependencies
-
-Run the following command to install the required dependencies:
+2. **Install Dependencies**
 
 ```bash
 npm install
 ```
 
+
 ---
 
 ## Environment Variables (.env.template)
 
-All configuration for the frontend (API endpoints, etc.) is managed through the `.env.template` file at the project root.
+All configuration for the frontend is managed through the `.env.template` file at the project root.
 
 **Instructions:**
 1. Copy `.env.template` to `.env`:
-    ```bash
-    cp .env.template .env
-    ```
-2. Edit `.env` to set your backend API URL (`REACT_APP_API_URL`).
-   - For production: `REACT_APP_API_URL=https://ci-cd-back-dbsx.onrender.com`
-   - For development: `REACT_APP_API_URL=http://localhost:8000`
 
-**Do not add sensitive information to this file.**
+```bash
+cp .env.template .env
+```
 
 ---
 
@@ -99,12 +94,7 @@ Open http://localhost:3000 to view it in your browser.
 The page will reload when you make changes.
 You may also see any lint errors in the console.
 
-```bash
-npm run test
-```
 
-Launches the test runner in the interactive watch mode.
-You can write tests to verify your application’s functionality using Jest.
 
 ```bash
 npm run build
@@ -120,17 +110,17 @@ Your app is ready to be deployed!
 
 ## Running Tests
 
-1. Run Unit and Integration Tests
+1. **Run Unit and Integration Tests**
 
 To run the unit and integration tests, run:
 
 ```bash
-npm test
+npm run test
 ```
 
 This will start Jest in watch mode, running all the tests defined in your project.
 
-2. Check Test Coverage
+2. **Check Test Coverage**
 
 Codecov integration is set up to track test coverage. After running the tests, the coverage report will be uploaded automatically to Codecov. You can view the coverage details on the Codecov website.
 
@@ -167,28 +157,32 @@ The app is deployed to GitHub Pages using GitHub Actions. To deploy, simply push
 
 This project includes automation for building, versioning, and publishing the NPM package to the NPM registry. Below are the key steps involved:
 
-Configure Git: Git user settings are configured to automatically commit with the correct user information:
+**Configure Git:** Git user settings are configured to automatically commit with the correct user information:
+
 ```bash
 git config --global user.email "jamil.abdelhamid@ynov.com"
 git config --global user.name "Jamil18474"
 ```
 
-Build the NPM Package: The NPM package is built using the following command, which compiles the necessary files for publishing:
+**Build the NPM Package:** The NPM package is built using the following command, which compiles the necessary files for publishing:
+
 ```bash
 npm run build-npm
 ```
 
-Versioning: The version of the package is bumped (using the patch version increment):
+**Versioning:** The version of the package is bumped (using the patch version increment):
+
 ```bash
 npm version patch
 ```
 
-Publish: After building and versioning, the package is automatically published to the NPM registry:
+**Publish:** After building and versioning, the package is automatically published to the NPM registry:
+
 ```bash
 npm publish
 ```
 
-NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_TOKEN) is used for secure publishing.
+NPM Authentication Token: An authentication token stored in GitHub secrets (`NPM_TOKEN`) is used for secure publishing.
 
 ---
 
@@ -204,29 +198,37 @@ NPM Authentication Token: An authentication token stored in GitHub secrets (NPM_
 
 ---
 
-## Usage with Docker (Fullstack)
+## Usage with Docker
 
-You can run the **frontend, backend, and MongoDB database** locally using Docker Compose.
+You can run the **frontend** locally using Docker Compose.
 
 ### 1. Prerequisites
 
 - Docker and Docker Compose installed
-- `.env` files correctly configured for both frontend and backend
+- `.env` files correctly configured for frontend
 
 ### 2. Start the stack
 
 From the root folder (where your `docker-compose.yml` is), run:
 
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose.yml up --build -d
 ```
 
 This will start:
 - the frontend app on [http://localhost:3000](http://localhost:3000)
-- the backend API on [http://localhost:8000](http://localhost:8000)
-- the MongoDB database on port 27017
 
-You can now use the application locally, with all services running in Docker containers.
+You can now use the application locally.
+
+---
+
+### Stopping and Removing Docker Containers and Volumes
+
+To **stop and remove the container**, use:
+
+```bash
+docker-compose -f docker-compose.yml down
+```
 
 ---
 
@@ -243,6 +245,6 @@ You can now use the application locally, with all services running in Docker con
 - **Deployment**: Process of automatic deployment via GitHub Actions to GitHub Pages.
 - **NPM Package Build** and Publish: Steps for automating the NPM package build, versioning, and publishing process.
 - **Technologies Used**: List of the main technologies used in the project.
-- **Usage with Docker (Fullstack)**: How to run the entire stack (frontend + backend + MongoDB) with Docker Compose for local development.
+- **Usage with Docker**: How to run the frontend with Docker Compose for local development.
 
 This `README.md` file contains all the necessary information to get started, test, and deploy your project with detailed instructions.

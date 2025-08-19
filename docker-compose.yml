@@ -2,15 +2,12 @@
 services:
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: Dockerfile
     container_name: user_management_frontend
     ports:
       - "3000:3000"
     environment:
       # ✅ Variables frontend
-      - REACT_APP_API_URL=${REACT_APP_API_URL}
+      - API_URL=${API_URL}
       - NODE_ENV=${NODE_ENV}
-
-volumes:
-  mongodb_data:

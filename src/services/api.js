@@ -4,7 +4,7 @@
  */
 
 // Configuration de base
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.API_URL;
 
 /**
  * Classe de gestion des erreurs API

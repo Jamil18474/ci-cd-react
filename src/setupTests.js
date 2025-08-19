@@ -65,5 +65,5 @@ Object.defineProperty(window, 'matchMedia', {
     })),
 });
 
-// Mock process.env.REACT_APP_API_URL
-process.env.REACT_APP_API_URL = 'https://ci-cd-back-dbsx.onrender.com';
+// Mock process.env.API_URL
+process.env.API_URL = 'https://ci-cd-back-dbsx.onrender.com';
