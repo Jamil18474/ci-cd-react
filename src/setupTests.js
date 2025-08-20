@@ -64,6 +64,3 @@ Object.defineProperty(window, 'matchMedia', {
         dispatchEvent: jest.fn(),
     })),
 });
-
-// Mock process.env.REACT_APP_API_URL
-//process.env.REACT_APP_API_URL = 'https://ci-cd-back-dbsx.onrender.com';

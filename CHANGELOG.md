@@ -1,7 +1,19 @@
-#### 0.1.38 (2025-08-19)
+#### 0.1.51 (2025-08-20)
+
+##### Chores
+
+*  final cleanup and project wrap-up (403ba590)
 
 ##### Continuous Integration
 
+*  increment package version (fdff0e0e)
+*  increment package version (ede1de8e)
+*  increment package version (ff66d588)
+*  increment package version (8b4c6d7b)
+*  increment package version (1c5d9705)
+*  increment package version (0122804d)
+*  increment package version (271ec6f6)
+*  increment package version (9b886c9a)
 *  increment package version (09ca1a5a)
 *  increment package version (2954b379)
 *  increment package version (625acf80)
@@ -40,6 +52,7 @@
 
 ##### Bug Fixes
 
+*  add REACT_APP_ prefix to environment variables for frontend API access and update tests for Router basename (7150f2c2)
 * **accessibility:**  correct heading order and add 404.html for SPA routing (59299e45)
 
 ##### Tests
