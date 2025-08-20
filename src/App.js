@@ -31,7 +31,7 @@ const theme = createTheme({
 });
 
 function App() {
-    const basename = process.env.NODE_ENV === 'production' ? '/ci-cd-react' : '';
+    const basename = '/ci-cd-react';
 
     return (
         <ThemeProvider theme={theme}>

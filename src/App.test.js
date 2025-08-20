@@ -4,6 +4,8 @@ import '@testing-library/jest-dom';
 // MAINTENANT importer App
 import App from './App';
 
+const BASE = '/ci-cd-react';
+
 // Mock TOUTES les dépendances AVANT d'importer App
 jest.mock('./contexts/AuthContext', () => ({
     AuthProvider: ({ children }) => <div data-testid="auth-provider">{children}</div>,
@@ -40,7 +42,7 @@ jest.mock('./components/auth/PrivateRoute', () => ({ children }) => <div data-te
 describe('App Component - Focus sur couverture', () => {
     beforeEach(() => {
         // Remettre la route initiale à chaque test pour éviter les effets de bord
-        window.history.pushState({}, '', '/');
+        window.history.pushState({}, '', `${BASE}/`);
     });
 
     /**
@@ -60,7 +62,7 @@ describe('App Component - Focus sur couverture', () => {
      * Test : route par défaut (HomePage)
      */
     test('should render HomePage on default route', () => {
-        window.history.pushState({}, '', '/');
+        window.history.pushState({}, '', `${BASE}/`);
         render(<App />);
         expect(screen.getByTestId('home-page')).toBeInTheDocument();
     });
@@ -69,7 +71,7 @@ describe('App Component - Focus sur couverture', () => {
      * Test : route login
      */
     test('should render LoginPage on /login route', () => {
-        window.history.pushState({}, '', '/login');
+        window.history.pushState({}, '', `${BASE}/login`);
         render(<App />);
         expect(screen.getByTestId('login-page')).toBeInTheDocument();
     });
@@ -78,7 +80,7 @@ describe('App Component - Focus sur couverture', () => {
      * Test : route register
      */
     test('should render RegisterPage on /register route', () => {
-        window.history.pushState({}, '', '/register');
+        window.history.pushState({}, '', `${BASE}/register`);
         render(<App />);
         expect(screen.getByTestId('register-page')).toBeInTheDocument();
     });
@@ -87,7 +89,7 @@ describe('App Component - Focus sur couverture', () => {
      * Test : route protégée users
      */
     test('should render protected UsersListPage on /users route', () => {
-        window.history.pushState({}, '', '/users');
+        window.history.pushState({}, '', `${BASE}/users`);
         render(<App />);
         expect(screen.getByTestId('private-route')).toBeInTheDocument();
         expect(screen.getByTestId('users-page')).toBeInTheDocument();
@@ -97,7 +99,7 @@ describe('App Component - Focus sur couverture', () => {
      * Test : route admin protégée
      */
     test('should render protected AdminDashboard on /admin route', () => {
-        window.history.pushState({}, '', '/admin');
+        window.history.pushState({}, '', `${BASE}/admin`);
         render(<App />);
         expect(screen.getByTestId('private-route')).toBeInTheDocument();
         expect(screen.getByTestId('admin-page')).toBeInTheDocument();
@@ -107,7 +109,7 @@ describe('App Component - Focus sur couverture', () => {
      * Test : redirection sur route inconnue
      */
     test('should redirect unknown routes to home', () => {
-        window.history.pushState({}, '', '/unknown-route');
+        window.history.pushState({}, '', `${BASE}/unknown-route`);
         render(<App />);
         expect(screen.getByTestId('home-page')).toBeInTheDocument();
     });
@@ -124,12 +126,19 @@ describe('App Component - Focus sur couverture', () => {
         expect(screen.getByTestId('toast-container')).toBeInTheDocument();
     });
 
+    test('Router basename is /ci-cd-react in local mode', () => {
+        const originalEnv = process.env.NODE_ENV;
+        process.env.NODE_ENV = 'development';
+        window.history.pushState({}, '', `${BASE}/`);
+        render(<App />);
+        process.env.NODE_ENV = originalEnv;
+    });
+
     test('Router basename is /ci-cd-react in production mode', () => {
         const originalEnv = process.env.NODE_ENV;
         process.env.NODE_ENV = 'production';
-        window.history.pushState({}, '', '/ci-cd-react/');
+        window.history.pushState({}, '', `${BASE}/`);
         render(<App />);
-        // Ici le coverage couvrira la branche "/ci-cd-react"
         process.env.NODE_ENV = originalEnv;
     });
     test('should focus and blur skip link for accessibility (couvre onFocus/onBlur)', () => {

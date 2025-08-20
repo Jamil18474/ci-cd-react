@@ -103,7 +103,7 @@ describe('API Integration Tests (Essential)', () => {
         await authService.logout();
 
         expect(fetch).toHaveBeenCalledWith(
-            `${process.env.API_URL}/api/auth/logout`,
+            `${process.env.REACT_APP_API_URL}/api/auth/logout`,
             expect.objectContaining({
                 method: 'POST',
                 headers: expect.objectContaining({
@@ -149,7 +149,7 @@ describe('API Integration Tests (Essential)', () => {
         await userService.getAllUsers({ page: 1, limit: 10 });
 
         expect(fetch).toHaveBeenCalledWith(
-            `${process.env.API_URL}/api/users?page=1&limit=10`,
+            `${process.env.REACT_APP_API_URL}/api/users?page=1&limit=10`,
             expect.any(Object)
         );
     });
@@ -181,7 +181,7 @@ describe('API Integration Tests (Essential)', () => {
         await userService.getAllUsers();
 
         expect(fetch).toHaveBeenCalledWith(
-            `${process.env.API_URL}/api/users`,
+            `${process.env.REACT_APP_API_URL}/api/users`,
             expect.objectContaining({
                 headers: expect.not.objectContaining({
                     'Authorization': expect.any(String)
@@ -214,7 +214,7 @@ describe('API Integration Tests (Essential)', () => {
         await userService.getAllUsers();
 
         expect(fetch).toHaveBeenLastCalledWith(
-            `${process.env.API_URL}/api/users`,
+            `${process.env.REACT_APP_API_URL}/api/users`,
             expect.objectContaining({
                 headers: expect.objectContaining({
                     'Authorization': 'Bearer returned-token'
@@ -357,7 +357,7 @@ describe('API Integration Tests (Essential)', () => {
         await userService.getAllUsers();
 
         expect(fetch).toHaveBeenLastCalledWith(
-            `${process.env.API_URL}/api/users`,
+            `${process.env.REACT_APP_API_URL}/api/users`,
             expect.objectContaining({
                 headers: expect.objectContaining({
                     'Content-Type': 'application/json'
@@ -393,7 +393,7 @@ describe('API Integration Tests (Essential)', () => {
         await userService.getAllUsers({});
 
         expect(fetch).toHaveBeenCalledWith(
-            `${process.env.API_URL}/api/users`,
+            `${process.env.REACT_APP_API_URL}/api/users`,
             expect.any(Object)
         );
     });

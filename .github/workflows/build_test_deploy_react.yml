@@ -54,7 +54,7 @@ jobs:
           # Run unit tests
           npm test
         env:
-          API_URL: ${{ secrets.API_URL }}
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
 
       # 5. Set the Git remote URL to use an access token for authentication.
       - name: Authenticate with npm

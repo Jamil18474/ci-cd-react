@@ -23,7 +23,7 @@ A simple React application that allows users to register by filling out a form w
 
 ## Production URLs
 
-- **Production Frontend**: [https://jamil18474.github.io](https://jamil18474.github.io)
+- **Production Frontend**: [https://jamil18474.github.io/ci-cd-react/](https://jamil18474.github.io/ci-cd-react/)
 - **Production Backend API**: [https://ci-cd-back-dbsx.onrender.com](https://ci-cd-back-dbsx.onrender.com)
 
 ---
@@ -122,8 +122,8 @@ This will start Jest in watch mode, running all the tests defined in your projec
 
 2. **Check Test Coverage**
 
-Codecov integration is set up to track test coverage. After running the tests, the coverage report will be uploaded automatically to Codecov. You can view the coverage details on the Codecov website.
-
+Codecov integration is set up to track test coverage. After running the tests, the coverage report will be uploaded automatically to Codecov.
+You can view the coverage details on the Codecov website available at : https://app.codecov.io/gh/Jamil18474/ci-cd-react
 ---
 
 ## Generate API Documentation
@@ -136,6 +136,8 @@ npm run jsdoc
 
 This will create a docs folder containing the generated documentation based on the comments in your code.
 
+You can view the documentation locally : http://localhost:3000/ci-cd-react/docs/
+or in production : https://jamil18474.github.io/ci-cd-react/docs/
 ---
 
 ## GitHub Actions CI/CD
